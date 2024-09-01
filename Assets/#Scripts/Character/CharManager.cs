@@ -79,4 +79,14 @@ public class CharManager : HitBase
     {
 
     }
+
+    protected override void LookTargetCallback()
+    {
+        if (LookTarget == null) GameManager._instance.cineCam.Priority = -1;
+        else
+        {
+            GameManager._instance.cineCam.LookAt = LookTarget.transform;
+            GameManager._instance.cineCam.Priority = 1;
+        }
+    }
 }

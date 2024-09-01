@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -8,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     public CharManager character;
     public Camera cam;
+    public CinemachineCamera cineCam;
 
     [Header("PANEL")]
     public CharPanel charPanel;
@@ -18,6 +20,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         cam = Camera.main;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void SetTimeScale(float _scale = 0.1f, int _time = 50)

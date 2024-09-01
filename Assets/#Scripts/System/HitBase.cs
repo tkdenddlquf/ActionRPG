@@ -59,8 +59,8 @@ public abstract class HitBase : MonoBehaviour
 
     public void SetTarget()
     {
-        if (lookTarget != null) lookTarget = null;
-        else if (Physics.Raycast(GameManager._instance.cam.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 100, mask)) lookTarget = hit.transform.gameObject;
+        if (LookTarget != null) LookTarget = null;
+        else if (Physics.Raycast(GameManager._instance.cam.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 100, mask)) LookTarget = hit.transform.gameObject;
     }
 
     private void OnTriggerEnter(Collider _col)

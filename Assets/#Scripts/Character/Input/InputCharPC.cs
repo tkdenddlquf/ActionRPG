@@ -18,7 +18,25 @@ public class InputCharPC : InputBase
 
     private void CheckState()
     {
-        character.AnimState.StateRecord = AnimState.Idle;
+        switch (character.AnimState.StateRecord)
+        {
+            case AnimState.Walk:
+            case AnimState.Run:
+                if (Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0) character.AnimState.StateRecord = AnimState.Idle;
+                break;
+
+            case AnimState.Attack:
+                if (!Input.GetMouseButton(0)) character.AnimState.StateRecord = AnimState.Idle;
+                break;
+
+            case AnimState.Guard:
+                if (!Input.GetMouseButton(1)) character.AnimState.StateRecord = AnimState.Idle;
+                break;
+
+            case AnimState.Roll:
+                character.AnimState.StateRecord = AnimState.Idle;
+                break;
+        }
 
         if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0) // 이동
         {
@@ -26,12 +44,12 @@ public class InputCharPC : InputBase
             else character.AnimState.StateRecord = AnimState.Run;
         }
 
-        if (Input.GetMouseButton(0)) // 공격
+        if (Input.GetMouseButtonDown(0)) // 공격
         {
             character.AnimState.StateRecord = AnimState.Attack;
         }
 
-        if (Input.GetMouseButton(1)) // 방어
+        if (Input.GetMouseButtonDown(1)) // 방어
         {
             character.AnimState.StateRecord = AnimState.Guard;
         }

@@ -55,8 +55,6 @@ public class CharManager : HitBase
 
     protected override void AttackCallback(HitBase _hitBase) // 공격 성공
     {
-        Debug.Log(_hitBase.commonInfo.hp);
-
         if (LookTarget == _hitBase.gameObject) // 추적중인 경우
         {
             if (_hitBase.commonInfo.hp == 0) // 대상이 사망한 경우

@@ -18,6 +18,12 @@ public class EnemyStateBase
         if (enemy.LookTarget == null) // 추적할 대상이 없는 경우 원래 위치로 이동
         {
             if (Vector3.Distance(enemy.transform.position, initPos) < 1) enemy.AnimState.State = AnimState.Idle;
+            else
+            {
+                enemy.transform.LookAt(initPos); // 기존 위치로 방향 설정
+
+                enemy.AnimState.State = AnimState.Walk;
+            }
 
             return;
         }
@@ -42,11 +48,13 @@ public class EnemyStateBase
     {
         enemy.transform.LookAt(enemy.LookTarget.transform);
 
-        enemy.AnimState.State = AnimState.Walk;
+        enemy.AnimState.StateRecord = AnimState.Walk;
 
         if (dist < 1.8f) // 대상이 가까운 경우
         {
-            enemy.AnimState.State = AnimState.Attack;
+            enemy.AnimState.StateRecord = AnimState.Attack;
         }
+
+        enemy.AnimState.State = enemy.AnimState.StateRecord;
     }
 }

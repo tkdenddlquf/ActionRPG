@@ -6,7 +6,6 @@ public class CharManager : HitBase
 
     private InputBase inputBase;
 
-    private Rigidbody rb;
     private Animator animator;
 
     public int HP
@@ -19,22 +18,14 @@ public class CharManager : HitBase
         {
             commonInfo.hp = value;
 
-            GameManager._instance.charPanel.hp.@value = (float)value / commonInfoMax.hp;
+            GameManager._instance.charPanel.hp.@value = (float)value / commonInfo.maxHp;
 
-            if (commonInfo.hp < 0)
+            if (commonInfo.hp <= 0)
             {
                 commonInfo.hp = 0;
 
                 Die();
             }
-        }
-    }
-
-    public Rigidbody Rigidbody
-    {
-        get
-        {
-            return rb;
         }
     }
 
@@ -50,8 +41,9 @@ public class CharManager : HitBase
     {
         inputBase = new InputCharPC(this);
 
-        TryGetComponent(out rb);
         TryGetComponent(out animator);
+
+        foreach (var _aim in animator.GetBehaviours<AnimBehaviour>()) _aim.Init(GameManager._instance.cam.transform, this);
 
         Init("Enemy");
     }
@@ -77,12 +69,18 @@ public class CharManager : HitBase
 
     protected override void Die()
     {
-
+        Animator.SetBool("Die", true);
     }
 
     protected override void LookTargetCallback()
     {
-        if (LookTarget == null) GameManager._instance.cineCam.Priority = -1;
+        if (LookTarget == null)
+        {
+            GameManager._instance.cineOrbit.HorizontalAxis.Value = GameManager._instance.cam.transform.eulerAngles.y;
+            GameManager._instance.cineOrbit.VerticalAxis.Value = GameManager._instance.cam.transform.eulerAngles.x + 17.5f;
+
+            GameManager._instance.cineCam.Priority = -1;
+        }
         else
         {
             GameManager._instance.cineCam.LookAt = LookTarget.transform;

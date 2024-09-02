@@ -30,9 +30,14 @@ public class InputCharPC : InputBase
 
     public override void CheckInput()
     {
-        stateRecoard = AnimState.Idle;
-
         if (Input.GetKeyDown(KeyCode.Q)) character.SetTarget();
+
+        CheckState();
+    }
+
+    private void CheckState()
+    {
+        stateRecoard = AnimState.Idle;
 
         if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0) // ¿Ãµø
         {

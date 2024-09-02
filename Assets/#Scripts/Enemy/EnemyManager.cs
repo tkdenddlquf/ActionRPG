@@ -4,6 +4,8 @@ public class EnemyManager : HitBase
 {
     public bool isBoss = false;
 
+    private Animator animator;
+
     public int HP
     {
         get
@@ -13,14 +15,15 @@ public class EnemyManager : HitBase
         set
         {
             commonInfo.hp = value;
+            Animator.SetBool("Hit", true);
 
             if (isBoss)
             {
                 GameManager._instance.bossPanel.Target = this;
-                GameManager._instance.bossPanel.SetHp((float)value / commonInfoMax.hp);
+                GameManager._instance.bossPanel.SetHp((float)value / commonInfo.maxHp);
             }
 
-            if (commonInfo.hp < 0)
+            if (commonInfo.hp <= 0)
             {
                 commonInfo.hp = 0;
 
@@ -29,8 +32,20 @@ public class EnemyManager : HitBase
         }
     }
 
+    public Animator Animator
+    {
+        get
+        {
+            return animator;
+        }
+    }
+
     void Start()
     {
+        TryGetComponent(out animator);
+
+        foreach (var _aim in animator.GetBehaviours<AnimBehaviour>()) _aim.Init(transform, this);
+
         Init("Character");
     }
 
@@ -52,6 +67,8 @@ public class EnemyManager : HitBase
 
     protected override void Die()
     {
+        Animator.SetBool("Die", true);
+
         LookTarget = null;
     }
 

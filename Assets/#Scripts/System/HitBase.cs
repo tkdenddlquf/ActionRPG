@@ -4,17 +4,31 @@ public abstract class HitBase : MonoBehaviour
 {
     // STATUS
     public CommonInfo commonInfo;
-    public CommonInfoMax commonInfoMax;
 
     public GameObject attack;
     public bool roll;
 
     private CheckHit hit;
+    private Rigidbody rb;
 
     private System.Guid guid;
     private CheckHit target;
     private GameObject lookTarget;
     private LayerMask mask;
+
+    // 공격 범위 확인
+    private int hitCount;
+    private Vector3 hitBoxCenter = new(0, 1, 0.7f);
+    private Vector3 hitBoxSize = new(0.5f, 0.75f, 0.7f);
+    private readonly RaycastHit[] hits = new RaycastHit[5];
+
+    public Rigidbody Rigidbody
+    {
+        get
+        {
+            return rb;
+        }
+    }
 
     public GameObject LookTarget
     {
@@ -32,6 +46,7 @@ public abstract class HitBase : MonoBehaviour
 
     protected void Init(params string[] _layers)
     {
+        TryGetComponent(out rb);
         TryGetComponent(out hit);
         hit.hitAction = HitAction;
         hit.callback = AttackAction;
@@ -63,13 +78,15 @@ public abstract class HitBase : MonoBehaviour
         else if (Physics.Raycast(GameManager._instance.cam.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 100, mask)) LookTarget = hit.transform.gameObject;
     }
 
-    private void OnTriggerEnter(Collider _col)
+    public void CheckHit()
     {
         if (!attack.activeSelf) return;
 
-        if ((mask & (1 << _col.gameObject.layer)) != 0)
+        hitCount = Physics.BoxCastNonAlloc(transform.position + hitBoxCenter, hitBoxSize, transform.forward, hits, Quaternion.identity, 0.5f, mask);
+
+        for (int i = 0; i < hitCount; i++)
         {
-            if (_col.gameObject.TryGetComponent(out target)) target.Hit(guid, gameObject, commonInfo);
+            if (hits[i].collider.gameObject.TryGetComponent(out target)) target.Hit(guid, gameObject, commonInfo);
         }
     }
 }

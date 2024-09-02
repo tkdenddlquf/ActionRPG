@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     public CharManager character;
     public Camera cam;
+    public CinemachineOrbitalFollow cineOrbit;
     public CinemachineCamera cineCam;
 
     [Header("PANEL")]

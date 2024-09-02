@@ -20,23 +20,23 @@ public class InputCharPC : InputBase
     {
         character.AnimState.StateRecord = AnimState.Idle;
 
-        if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0) // ¿Ãµø
+        if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0) // Ïù¥Îèô
         {
             if (Input.GetKey(KeyCode.LeftAlt)) character.AnimState.StateRecord = AnimState.Walk;
             else character.AnimState.StateRecord = AnimState.Run;
         }
 
-        if (Input.GetMouseButton(0)) // ∞¯∞›
+        if (Input.GetMouseButton(0)) // Í≥µÍ≤©
         {
             character.AnimState.StateRecord = AnimState.Attack;
         }
 
-        if (Input.GetMouseButton(1)) // πÊæÓ
+        if (Input.GetMouseButton(1)) // Î∞©Ïñ¥
         {
             character.AnimState.StateRecord = AnimState.Guard;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space)) // ±∏∏£±‚
+        if (Input.GetKeyDown(KeyCode.Space)) // Íµ¨Î•¥Í∏∞
         {
             character.AnimState.StateRecord = AnimState.Roll;
         }

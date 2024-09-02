@@ -40,16 +40,16 @@ public class CharManager : HitBase
         inputBase.CheckInput();
     }
 
-    protected override bool HitAction(GameObject _target, CommonInfo _info) // ÇÇ°İ
+    protected override bool HitAction(GameObject _target, CommonInfo _info) // í”¼ê²©
     {
-        if (AnimState.roll) return false; // ±¸¸£´Â ÁßÀÎ °æ¿ì È¸ÇÇ
+        if (AnimState.roll) return false; // êµ¬ë¥´ëŠ” ì¤‘ì¸ ê²½ìš° íšŒí”¼
 
         HP -= _info.atk;
 
         return true;
     }
 
-    protected override void AttackAction() // °ø°İ ¼º°ø
+    protected override void AttackAction() // ê³µê²© ì„±ê³µ
     {
 
     }

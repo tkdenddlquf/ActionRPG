@@ -35,9 +35,9 @@ public class EnemyManager : HitBase
         Init("Character");
     }
 
-    protected override bool HitAction(GameObject _target, CommonInfo _info) // ÇÇ°İ
+    protected override bool HitAction(GameObject _target, CommonInfo _info) // í”¼ê²©
     {
-        if (AnimState.roll) return false; // ±¸¸£´Â ÁßÀÎ °æ¿ì È¸ÇÇ
+        if (AnimState.roll) return false; // êµ¬ë¥´ëŠ” ì¤‘ì¸ ê²½ìš° íšŒí”¼
 
         if (LookTarget == null) LookTarget = _target;
 
@@ -60,7 +60,7 @@ public class EnemyManager : HitBase
 
     protected override void LookTargetCallback()
     {
-        if (LookTarget == null) // ÃßÀûÀÌ ÇØÁ¦µÈ °æ¿ì
+        if (LookTarget == null) // ì¶”ì ì´ í•´ì œëœ ê²½ìš°
         {
             if (GameManager._instance.bossPanel.Target == this) GameManager._instance.bossPanel.Target = null;
         }

@@ -7,8 +7,8 @@ public class CheckHit : MonoBehaviour
 
     private System.Guid targetGuid = new();
 
-    public delegate bool HitAction(GameObject _target, CommonInfo _info); // °ø°İ ´çÇÑ°æ¿ì ½ÇÇà
-    public delegate void AttackAction(); // °ø°İ¿¡ ¼º°øÇÑ °æ¿ì ½ÇÇà
+    public delegate bool HitAction(GameObject _target, CommonInfo _info); // ê³µê²© ë‹¹í•œê²½ìš° ì‹¤í–‰
+    public delegate void AttackAction(); // ê³µê²©ì— ì„±ê³µí•œ ê²½ìš° ì‹¤í–‰
 
     public void Hit(System.Guid _guid, GameObject _target, CommonInfo _info)
     {

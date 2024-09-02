@@ -10,18 +10,18 @@ public abstract class HitBase : MonoBehaviour
     private CheckHit hit;
     private Rigidbody rb;
 
-    // ´ë»ó
+    // ëŒ€ìƒ
     private System.Guid guid;
     private CheckHit target;
     private GameObject lookTarget;
     private LayerMask mask;
 
-    // °ø°İÈ®ÀÎ ¹× ¹üÀ§
+    // ê³µê²©í™•ì¸ ë° ë²”ìœ„
     private int hitCount;
     private Vector3 hitBoxSize = new(0.5f, 0.75f, 0.7f);
     private readonly RaycastHit[] hits = new RaycastHit[5];
 
-    // ¾Ö´Ï¸ŞÀÌ¼Ç ¹× »óÅÂ
+    // ì• ë‹ˆë©”ì´ì…˜ ë° ìƒíƒœ
     private Animator animator;
     private AnimStateBase animState;
 
@@ -80,11 +80,11 @@ public abstract class HitBase : MonoBehaviour
         SetGuid();
     }
 
-    protected abstract bool HitAction(GameObject _target, CommonInfo _info); // ÇÇ°İ
+    protected abstract bool HitAction(GameObject _target, CommonInfo _info); // í”¼ê²©
 
-    protected abstract void AttackAction(); // °ø°İ ¼º°ø
+    protected abstract void AttackAction(); // ê³µê²© ì„±ê³µ
 
-    protected abstract void Die(); // »ç¸Á
+    protected abstract void Die(); // ì‚¬ë§
 
     protected virtual void LookTargetCallback()
     {

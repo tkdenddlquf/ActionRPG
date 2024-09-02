@@ -34,7 +34,7 @@ public class InputCharPC : InputBase
                 break;
 
             case AnimState.Roll:
-                character.AnimState.StateRecord = AnimState.Idle;
+                if (character.AnimState.roll) character.AnimState.StateRecord = AnimState.Idle;
                 break;
         }
 

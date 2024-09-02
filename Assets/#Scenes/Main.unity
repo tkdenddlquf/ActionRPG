@@ -1093,7 +1093,7 @@ GameObject:
   - component: {fileID: 621590130}
   - component: {fileID: 621590129}
   - component: {fileID: 621590128}
-  - component: {fileID: 621590127}
+  - component: {fileID: 621590131}
   m_Layer: 0
   m_Name: LookTarget Cam
   m_TagString: Untagged
@@ -1101,35 +1101,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &621590127
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 621590126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f38bda98361e1de48a4ca2bd86ea3c17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Composition:
-    ScreenPosition: {x: 0, y: 0.15}
-    DeadZone:
-      Enabled: 0
-      Size: {x: 0.2, y: 0.2}
-    HardLimits:
-      Enabled: 0
-      Size: {x: 0.8, y: 0.8}
-      Offset: {x: 0, y: 0}
-  CenterOnActivate: 1
-  TargetOffset: {x: 0, y: 0.85, z: 0}
-  Damping: {x: 0.5, y: 0.5}
-  Lookahead:
-    Enabled: 0
-    Time: 0
-    Smoothing: 0
-    IgnoreY: 0
 --- !u!114 &621590128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1212,13 +1183,26 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 621590126}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.37719277, y: -0.000000025563134, z: 0.000000010411259, w: 0.92613477}
-  m_LocalPosition: {x: 0.00000015798284, y: 4.8946505, z: -2.921805}
+  m_LocalRotation: {x: 0.6127685, y: 0, z: 0, w: 0.7902625}
+  m_LocalPosition: {x: 0, y: 5.973984, z: -1.0561184}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 145504740}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &621590131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621590126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e8b78ac948f05a46a6d8339a503172b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LookAtOffset: {x: 0, y: 1.5, z: 0}
 --- !u!1 &755366397
 GameObject:
   m_ObjectHideFlags: 0

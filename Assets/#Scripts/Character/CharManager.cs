@@ -67,6 +67,8 @@ public class CharManager : HitBase
     protected override void Die()
     {
         Animator.SetBool("Die", true);
+
+        LookTarget = null;
     }
 
     protected override void LookTargetCallback()

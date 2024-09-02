@@ -6,21 +6,40 @@ public abstract class HitBase : MonoBehaviour
     public CommonInfo commonInfo;
 
     public GameObject attack;
-    public bool roll;
 
     private CheckHit hit;
     private Rigidbody rb;
 
+    // 대상
     private System.Guid guid;
     private CheckHit target;
     private GameObject lookTarget;
     private LayerMask mask;
 
-    // 공격 범위 확인
+    // 공격확인 및 범위
     private int hitCount;
-    private Vector3 hitBoxCenter = new(0, 1, 0.7f);
     private Vector3 hitBoxSize = new(0.5f, 0.75f, 0.7f);
     private readonly RaycastHit[] hits = new RaycastHit[5];
+
+    // 애니메이션 및 상태
+    private Animator animator;
+    private AnimStateBase animState;
+
+    public Animator Animator
+    {
+        get
+        {
+            return animator;
+        }
+    }
+
+    public AnimStateBase AnimState
+    {
+        get
+        {
+            return animState;
+        }
+    }
 
     public Rigidbody Rigidbody
     {
@@ -50,6 +69,11 @@ public abstract class HitBase : MonoBehaviour
         TryGetComponent(out hit);
         hit.hitAction = HitAction;
         hit.callback = AttackAction;
+
+        TryGetComponent(out animator);
+        animState = new(animator);
+
+        foreach (var _aim in animator.GetBehaviours<AnimBehaviour>()) _aim.Init(transform, this);
 
         mask = LayerMask.GetMask(_layers);
 
@@ -82,7 +106,7 @@ public abstract class HitBase : MonoBehaviour
     {
         if (!attack.activeSelf) return;
 
-        hitCount = Physics.BoxCastNonAlloc(transform.position + hitBoxCenter, hitBoxSize, transform.forward, hits, Quaternion.identity, 0.5f, mask);
+        hitCount = Physics.BoxCastNonAlloc(attack.transform.position, hitBoxSize, transform.forward, hits, Quaternion.identity, 0, mask);
 
         for (int i = 0; i < hitCount; i++)
         {

@@ -4,8 +4,6 @@ public class EnemyManager : HitBase
 {
     public bool isBoss = false;
 
-    private Animator animator;
-
     public int HP
     {
         get
@@ -32,26 +30,14 @@ public class EnemyManager : HitBase
         }
     }
 
-    public Animator Animator
-    {
-        get
-        {
-            return animator;
-        }
-    }
-
     void Start()
     {
-        TryGetComponent(out animator);
-
-        foreach (var _aim in animator.GetBehaviours<AnimBehaviour>()) _aim.Init(transform, this);
-
         Init("Character");
     }
 
     protected override bool HitAction(GameObject _target, CommonInfo _info) // 피격
     {
-        if (roll) return false; // 구르는 중인 경우 회피
+        if (AnimState.roll) return false; // 구르는 중인 경우 회피
 
         if (LookTarget == null) LookTarget = _target;
 

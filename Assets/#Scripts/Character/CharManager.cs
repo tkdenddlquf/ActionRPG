@@ -6,8 +6,6 @@ public class CharManager : HitBase
 
     private InputBase inputBase;
 
-    private Animator animator;
-
     public int HP
     {
         get
@@ -17,6 +15,7 @@ public class CharManager : HitBase
         set
         {
             commonInfo.hp = value;
+            Animator.SetBool("Hit", true);
 
             GameManager._instance.charPanel.hp.@value = (float)value / commonInfo.maxHp;
 
@@ -29,21 +28,9 @@ public class CharManager : HitBase
         }
     }
 
-    public Animator Animator
-    {
-        get
-        {
-            return animator;
-        }
-    }
-
     private void Start()
     {
         inputBase = new InputCharPC(this);
-
-        TryGetComponent(out animator);
-
-        foreach (var _aim in animator.GetBehaviours<AnimBehaviour>()) _aim.Init(GameManager._instance.cam.transform, this);
 
         Init("Enemy");
     }
@@ -55,7 +42,7 @@ public class CharManager : HitBase
 
     protected override bool HitAction(GameObject _target, CommonInfo _info) // 피격
     {
-        if (roll) return false; // 구르는 중인 경우 회피
+        if (AnimState.roll) return false; // 구르는 중인 경우 회피
 
         HP -= _info.atk;
 

@@ -25,7 +25,7 @@ public class AnimBehaviour : StateMachineBehaviour
                 break;
 
             case 5:
-                hitBase.roll = true;
+                hitBase.AnimState.roll = true;
                 break;
         }
     }
@@ -59,7 +59,7 @@ public class AnimBehaviour : StateMachineBehaviour
         switch (thisState)
         {
             case 5:
-                hitBase.roll = false;
+                hitBase.AnimState.roll = false;
                 break;
         }
     }

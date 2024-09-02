@@ -905,6 +905,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1233182173}
     m_Modifications:
+    - target: {fileID: 1775273790075306101, guid: f84e50b40bac5ef42a4c4fe8f96c00ee, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1775273790075306101, guid: f84e50b40bac5ef42a4c4fe8f96c00ee, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.7
+      objectReference: {fileID: 0}
     - target: {fileID: 2731462105284896579, guid: f84e50b40bac5ef42a4c4fe8f96c00ee, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1212,8 +1220,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 621590126}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.1958921, y: -0.00000004885993, z: 0.000000009760378, w: 0.98062545}
-  m_LocalPosition: {x: 0.0000003680105, y: 3.636774, z: -3.7530105}
+  m_LocalRotation: {x: 0.4933762, y: -0.000000026493176, z: 0.000000015027432, w: 0.86981606}
+  m_LocalPosition: {x: 0.00000012504012, y: 5.5331726, z: -2.1126397}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3024,7 +3032,7 @@ Animator:
   m_GameObject: {fileID: 6833278296318912942}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 5330a7a2b9b100143a7dc1d031c03d8b, type: 3}
-  m_Controller: {fileID: 22100000, guid: a74f8e90d81f18e49b91d6387af058f8, type: 2}
+  m_Controller: {fileID: 22100000, guid: 37e2c7e38dab56b428885826af59df23, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1

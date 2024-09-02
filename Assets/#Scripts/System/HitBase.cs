@@ -68,21 +68,18 @@ public abstract class HitBase : MonoBehaviour
         TryGetComponent(out rb);
         TryGetComponent(out hit);
         hit.hitAction = HitAction;
-        hit.callback = AttackAction;
 
         TryGetComponent(out animator);
         animState = new(animator);
-
-        foreach (var _aim in animator.GetBehaviours<AnimBehaviour>()) _aim.Init(transform, this);
 
         mask = LayerMask.GetMask(_layers);
 
         SetGuid();
     }
 
-    protected abstract bool HitAction(GameObject _target, CommonInfo _info); // 피격
+    protected abstract bool HitAction(HitBase _hitBase); // 피격
 
-    protected abstract void AttackAction(); // 공격 성공
+    protected abstract void AttackCallback(HitBase _hitBase); // 공격 성공
 
     protected abstract void Die(); // 사망
 
@@ -110,7 +107,7 @@ public abstract class HitBase : MonoBehaviour
 
         for (int i = 0; i < hitCount; i++)
         {
-            if (hits[i].collider.gameObject.TryGetComponent(out target)) target.Hit(guid, gameObject, commonInfo);
+            if (hits[i].collider.gameObject.TryGetComponent(out target)) target.Hit(guid, this, AttackCallback);
         }
     }
 }

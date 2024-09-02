@@ -33,6 +33,10 @@ public class CharManager : HitBase
         inputBase = new InputCharPC(this);
 
         Init("Enemy");
+
+        AnimBehaviour[] _animBehaviours = Animator.GetBehaviours<AnimBehaviour>();
+
+        foreach (AnimBehaviour _animBehaviour in _animBehaviours) _animBehaviour.Init(GameManager._instance.cam.transform, this);
     }
 
     private void Update()
@@ -40,18 +44,26 @@ public class CharManager : HitBase
         inputBase.CheckInput();
     }
 
-    protected override bool HitAction(GameObject _target, CommonInfo _info) // 피격
+    protected override bool HitAction(HitBase _hitBase) // 피격
     {
         if (AnimState.roll) return false; // 구르는 중인 경우 회피
 
-        HP -= _info.atk;
+        HP -= _hitBase.commonInfo.atk;
 
         return true;
     }
 
-    protected override void AttackAction() // 공격 성공
+    protected override void AttackCallback(HitBase _hitBase) // 공격 성공
     {
+        Debug.Log(_hitBase.commonInfo.hp);
 
+        if (LookTarget == _hitBase.gameObject) // 추적중인 경우
+        {
+            if (_hitBase.commonInfo.hp == 0) // 대상이 사망한 경우
+            {
+                LookTarget = null;
+            }
+        }
     }
 
     protected override void Die()

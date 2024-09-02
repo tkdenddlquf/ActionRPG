@@ -7,7 +7,7 @@ public class AnimBehaviour : StateMachineBehaviour
     private Transform look;
     private HitBase hitBase;
 
-    private Vector3 MoveDir => new(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+    private Vector3 MoveDir => look == hitBase.transform ? Vector3.forward : new(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
     private Quaternion Angle => Quaternion.LookRotation(new Vector3(look.forward.x, 0, look.forward.z));
 
     public void Init(Transform _look, HitBase _base)
@@ -20,6 +20,10 @@ public class AnimBehaviour : StateMachineBehaviour
     {
         switch (thisState)
         {
+            case -1:
+                _animator.SetBool("Hit", false);
+                break;
+
             case 1:
                 hitBase.SetGuid();
                 break;
@@ -32,11 +36,11 @@ public class AnimBehaviour : StateMachineBehaviour
 
     public override void OnStateUpdate(Animator _animator, AnimatorStateInfo _stateInfo, int _layerIndex)
     {
-        _animator.SetBool("Hit", false);
-
         switch (thisState)
         {
             case 1:
+                _animator.SetBool("Hit", false);
+
                 hitBase.transform.rotation = Quaternion.Slerp(hitBase.transform.rotation, Angle, 0.3f * Time.deltaTime);
                 hitBase.CheckHit();
                 break;
@@ -49,12 +53,12 @@ public class AnimBehaviour : StateMachineBehaviour
                 break;
 
             case 5:
-                hitBase.Rigidbody.AddRelativeForce((1 - _stateInfo.normalizedTime) * 600 * Vector3.forward);
+                hitBase.Rigidbody.AddRelativeForce((1 - _stateInfo.normalizedTime) * 500 * Vector3.forward);
                 break;
         }
     }
 
-    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateExit(Animator _animator, AnimatorStateInfo _stateInfo, int _layerIndex)
     {
         switch (thisState)
         {

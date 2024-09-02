@@ -4,6 +4,8 @@ public class EnemyManager : HitBase
 {
     public bool isBoss = false;
 
+    private EnemyStateBase enemyStateBase;
+
     public int HP
     {
         get
@@ -30,25 +32,42 @@ public class EnemyManager : HitBase
         }
     }
 
-    void Start()
+    private void Start()
     {
+        enemyStateBase = new(this);
+
         Init("Character");
+
+        AnimBehaviour[] _animBehaviours = Animator.GetBehaviours<AnimBehaviour>();
+
+        foreach (AnimBehaviour _animBehaviour in _animBehaviours) _animBehaviour.Init(transform, this);
     }
 
-    protected override bool HitAction(GameObject _target, CommonInfo _info) // 피격
+    private void Update()
+    {
+        enemyStateBase.UpdateState();
+    }
+
+    protected override bool HitAction(HitBase _hitBase) // 피격
     {
         if (AnimState.roll) return false; // 구르는 중인 경우 회피
 
-        if (LookTarget == null) LookTarget = _target;
+        if (LookTarget == null) LookTarget = _hitBase.gameObject;
 
-        HP -= _info.atk;
+        HP -= _hitBase.commonInfo.atk;
 
         return true;
     }
 
-    protected override void AttackAction()
+    protected override void AttackCallback(HitBase _hitBase)
     {
-
+        if (LookTarget == _hitBase.gameObject) // 추적중인 경우
+        {
+            if (_hitBase.commonInfo.hp == 0) // 대상이 사망한 경우
+            {
+                LookTarget = null;
+            }
+        }
     }
 
     protected override void Die()

@@ -6,32 +6,6 @@ public class EnemyManager : HitBase
 
     private EnemyStateBase enemyStateBase;
 
-    public int HP
-    {
-        get
-        {
-            return commonInfo.hp;
-        }
-        set
-        {
-            commonInfo.hp = value;
-            Animator.SetBool("Hit", true);
-
-            if (isBoss)
-            {
-                GameManager._instance.bossPanel.Target = this;
-                GameManager._instance.bossPanel.SetHp((float)value / commonInfo.maxHp);
-            }
-
-            if (commonInfo.hp <= 0)
-            {
-                commonInfo.hp = 0;
-
-                Die();
-            }
-        }
-    }
-
     private void Start()
     {
         enemyStateBase = new(this);
@@ -41,6 +15,8 @@ public class EnemyManager : HitBase
         AnimBehaviour[] _animBehaviours = Animator.GetBehaviours<AnimBehaviour>();
 
         foreach (AnimBehaviour _animBehaviour in _animBehaviours) _animBehaviour.Init(transform, this);
+
+        commonInfo.Hp.SetBind(HpBind);
     }
 
     private void Update()
@@ -48,13 +24,38 @@ public class EnemyManager : HitBase
         enemyStateBase.UpdateState();
     }
 
+    // 데이터 바인드
+    private void HpBind(ref int _current, int _change)
+    {
+        if (_current > _change) Animator.SetBool("Hit", true);
+
+        if (_current == _change) return;
+
+        _current = _change;
+
+        if (isBoss)
+        {
+            GameManager._instance.bossPanel.Target = this;
+            GameManager._instance.bossPanel.SetHp((float)_current / commonInfo.MaxHp.Data);
+        }
+
+        if (_current <= 0)
+        {
+            _current = 0;
+
+            Die();
+        }
+    }
+
+    // 상속
     protected override bool HitAction(HitBase _hitBase) // 피격
     {
         if (AnimState.roll) return false; // 구르는 중인 경우 회피
 
         if (LookTarget == null) LookTarget = _hitBase.gameObject;
 
-        HP -= _hitBase.commonInfo.atk;
+        if (AnimState.guard) commonInfo.Hp.Data -= _hitBase.commonInfo.Atk.Data / 2;
+        else commonInfo.Hp.Data -= _hitBase.commonInfo.Atk.Data;
 
         return true;
     }
@@ -63,7 +64,7 @@ public class EnemyManager : HitBase
     {
         if (LookTarget == _hitBase.gameObject) // 추적중인 경우
         {
-            if (_hitBase.commonInfo.hp == 0) // 대상이 사망한 경우
+            if (_hitBase.commonInfo.Hp.Data == 0) // 대상이 사망한 경우
             {
                 LookTarget = null;
             }

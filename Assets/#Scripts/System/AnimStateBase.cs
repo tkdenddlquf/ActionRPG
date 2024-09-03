@@ -3,6 +3,7 @@ using UnityEngine;
 public class AnimStateBase
 {
     public bool roll;
+    public bool guard;
 
     private AnimState state;
     private AnimState stateRecord;
@@ -50,5 +51,6 @@ public enum AnimState
     Walk,
     Guard,
     Run,
-    Roll
+    Roll,
+    Hit
 }

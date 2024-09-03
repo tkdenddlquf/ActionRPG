@@ -25,29 +25,9 @@ public abstract class HitBase : MonoBehaviour
     private Animator animator;
     private AnimStateBase animState;
 
-    public Animator Animator
-    {
-        get
-        {
-            return animator;
-        }
-    }
-
-    public AnimStateBase AnimState
-    {
-        get
-        {
-            return animState;
-        }
-    }
-
-    public Rigidbody Rigidbody
-    {
-        get
-        {
-            return rb;
-        }
-    }
+    public Animator Animator => animator;
+    public AnimStateBase AnimState => animState;
+    public Rigidbody Rigidbody => rb;
 
     public GameObject LookTarget
     {

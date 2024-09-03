@@ -1183,8 +1183,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 621590126}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6127685, y: 0, z: 0, w: 0.7902625}
-  m_LocalPosition: {x: 0, y: 5.973984, z: -1.0561184}
+  m_LocalRotation: {x: 0.67090374, y: 0, z: 0, w: 0.74154454}
+  m_LocalPosition: {x: 0, y: 6.0800776, z: -0.4587291}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5171,17 +5171,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   commonInfo:
-    hp: 100
-    maxHp: 100
-    mp: 80
-    maxMp: 80
-    energy: 90
-    maxEnergy: 90
-    atk: 10
-    attackSpeed: 0
-    moveSpeed: 2
-    money: 0
-    exp: 0
+    Hp:
+      data: 100
+    MaxHp:
+      data: 100
+    Mp:
+      data: 80
+    MaxMp:
+      data: 80
+    Energy:
+      data: 90
+    MaxEnergy:
+      data: 90
+    Atk:
+      data: 10
+    AttackSpeed:
+      data: 1
+    MoveSpeed:
+      data: 3
+    Money:
+      data: 0
+    Exp:
+      data: 0
   attack: {fileID: 2455633144280111809}
   isBoss: 1
 --- !u!136 &7864074115514264624

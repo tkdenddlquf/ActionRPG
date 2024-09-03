@@ -6,28 +6,6 @@ public class CharManager : HitBase
 
     private InputBase inputBase;
 
-    public int HP
-    {
-        get
-        {
-            return commonInfo.hp;
-        }
-        set
-        {
-            commonInfo.hp = value;
-            Animator.SetBool("Hit", true);
-
-            GameManager._instance.charPanel.hp.@value = (float)value / commonInfo.maxHp;
-
-            if (commonInfo.hp <= 0)
-            {
-                commonInfo.hp = 0;
-
-                Die();
-            }
-        }
-    }
-
     private void Start()
     {
         inputBase = new InputCharPC(this);
@@ -37,6 +15,10 @@ public class CharManager : HitBase
         AnimBehaviour[] _animBehaviours = Animator.GetBehaviours<AnimBehaviour>();
 
         foreach (AnimBehaviour _animBehaviour in _animBehaviours) _animBehaviour.Init(GameManager._instance.cam.transform, this);
+
+        commonInfo.Hp.SetBind(HpBind);
+        commonInfo.Mp.SetBind(MpBind);
+        commonInfo.Energy.SetBind(EnergyBind);
     }
 
     private void Update()
@@ -44,11 +26,44 @@ public class CharManager : HitBase
         inputBase.CheckInput();
     }
 
+    // 데이터 바인드
+    private void HpBind(ref int _current, int _change)
+    {
+        if (_current > _change) Animator.SetBool("Hit", true);
+
+        _current = _change;
+
+        GameManager._instance.charPanel.hp.value = (float)_current / commonInfo.MaxHp.Data;
+
+        if (_current <= 0)
+        {
+            _current = 0;
+
+            Die();
+        }
+    }
+
+    private void MpBind(ref int _current, int _change)
+    {
+        _current = _change;
+
+        GameManager._instance.charPanel.mp.value = (float)_current / commonInfo.MaxMp.Data;
+    }
+
+    private void EnergyBind(ref int _current, int _change)
+    {
+        _current = _change;
+
+        GameManager._instance.charPanel.energy.value = (float)_current / commonInfo.MaxEnergy.Data;
+    }
+
+    // 상속
     protected override bool HitAction(HitBase _hitBase) // 피격
     {
         if (AnimState.roll) return false; // 구르는 중인 경우 회피
 
-        HP -= _hitBase.commonInfo.atk;
+        if (AnimState.guard) commonInfo.Hp.Data -= _hitBase.commonInfo.Atk.Data / 2;
+        else commonInfo.Hp.Data -= _hitBase.commonInfo.Atk.Data;
 
         return true;
     }
@@ -57,7 +72,7 @@ public class CharManager : HitBase
     {
         if (LookTarget == _hitBase.gameObject) // 추적중인 경우
         {
-            if (_hitBase.commonInfo.hp == 0) // 대상이 사망한 경우
+            if (_hitBase.commonInfo.Hp.Data == 0) // 대상이 사망한 경우
             {
                 LookTarget = null;
             }

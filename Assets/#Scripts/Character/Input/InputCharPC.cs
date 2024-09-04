@@ -20,6 +20,14 @@ public class InputCharPC : InputBase
     {
         switch (character.AnimState.StateRecord)
         {
+            case AnimState.Idle:
+                if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0) // 이동
+                {
+                    if (Input.GetKey(KeyCode.LeftAlt)) character.AnimState.StateRecord = AnimState.Walk;
+                    else character.AnimState.StateRecord = AnimState.Run;
+                }
+                break;
+
             case AnimState.Walk:
             case AnimState.Run:
                 if (Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0) character.AnimState.StateRecord = AnimState.Idle;
@@ -36,12 +44,6 @@ public class InputCharPC : InputBase
             case AnimState.Roll:
                 if (character.AnimState.roll) character.AnimState.StateRecord = AnimState.Idle;
                 break;
-        }
-
-        if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0) // 이동
-        {
-            if (Input.GetKey(KeyCode.LeftAlt)) character.AnimState.StateRecord = AnimState.Walk;
-            else character.AnimState.StateRecord = AnimState.Run;
         }
 
         if (Input.GetMouseButtonDown(0)) // 공격

@@ -3008,7 +3008,7 @@ Animator:
   m_GameObject: {fileID: 6833278296318912942}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 5330a7a2b9b100143a7dc1d031c03d8b, type: 3}
-  m_Controller: {fileID: 22100000, guid: 37e2c7e38dab56b428885826af59df23, type: 2}
+  m_Controller: {fileID: 22100000, guid: 0fa44e7a6c102e646b69abb5502370c3, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -5171,27 +5171,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   commonInfo:
-    Hp:
+    hp:
       data: 100
-    MaxHp:
+    maxHp:
       data: 100
-    Mp:
+    mp:
       data: 80
-    MaxMp:
+    maxMp:
       data: 80
-    Energy:
+    energy:
       data: 90
-    MaxEnergy:
+    maxEnergy:
       data: 90
-    Atk:
+    atk:
       data: 10
-    AttackSpeed:
+    attackSpeed:
       data: 1
-    MoveSpeed:
-      data: 3
-    Money:
+    moveSpeed:
+      data: 2
+    money:
       data: 0
-    Exp:
+    exp:
       data: 0
   attack: {fileID: 2455633144280111809}
   isBoss: 1

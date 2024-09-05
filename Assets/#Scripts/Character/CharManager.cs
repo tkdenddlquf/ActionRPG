@@ -12,13 +12,13 @@ public class CharManager : HitBase
 
         Init("Enemy");
 
-        AnimBehaviour[] _animBehaviours = Animator.GetBehaviours<AnimBehaviour>();
+        AnimStateMachine[] _animBehaviours = Animator.GetBehaviours<AnimStateMachine>();
 
-        foreach (AnimBehaviour _animBehaviour in _animBehaviours) _animBehaviour.Init(GameManager._instance.cam.transform, this);
+        foreach (AnimStateMachine _animBehaviour in _animBehaviours) _animBehaviour.Init(GameManager._instance.cam.transform, this);
 
-        commonInfo.Hp.SetBind(HpBind);
-        commonInfo.Mp.SetBind(MpBind);
-        commonInfo.Energy.SetBind(EnergyBind);
+        commonInfo.hp.SetBind(HpBind);
+        commonInfo.mp.SetBind(MpBind);
+        commonInfo.energy.SetBind(EnergyBind);
     }
 
     private void Update()
@@ -33,7 +33,7 @@ public class CharManager : HitBase
 
         _current = _change;
 
-        GameManager._instance.charPanel.hp.value = (float)_current / commonInfo.MaxHp.Data;
+        GameManager._instance.charPanel.hp.value = (float)_current / commonInfo.maxHp.Data;
 
         if (_current <= 0)
         {
@@ -47,14 +47,14 @@ public class CharManager : HitBase
     {
         _current = _change;
 
-        GameManager._instance.charPanel.mp.value = (float)_current / commonInfo.MaxMp.Data;
+        GameManager._instance.charPanel.mp.value = (float)_current / commonInfo.maxMp.Data;
     }
 
     private void EnergyBind(ref int _current, int _change)
     {
         _current = _change;
 
-        GameManager._instance.charPanel.energy.value = (float)_current / commonInfo.MaxEnergy.Data;
+        GameManager._instance.charPanel.energy.value = (float)_current / commonInfo.maxEnergy.Data;
     }
 
     // 상속
@@ -62,8 +62,8 @@ public class CharManager : HitBase
     {
         if (AnimState.roll) return false; // 구르는 중인 경우 회피
 
-        if (AnimState.guard) commonInfo.Hp.Data -= _hitBase.commonInfo.Atk.Data / 2;
-        else commonInfo.Hp.Data -= _hitBase.commonInfo.Atk.Data;
+        if (AnimState.guard) commonInfo.hp.Data -= _hitBase.commonInfo.atk.Data / 2;
+        else commonInfo.hp.Data -= _hitBase.commonInfo.atk.Data;
 
         return true;
     }
@@ -72,7 +72,7 @@ public class CharManager : HitBase
     {
         if (LookTarget == _hitBase.gameObject) // 추적중인 경우
         {
-            if (_hitBase.commonInfo.Hp.Data == 0) // 대상이 사망한 경우
+            if (_hitBase.commonInfo.hp.Data == 0) // 대상이 사망한 경우
             {
                 LookTarget = null;
             }

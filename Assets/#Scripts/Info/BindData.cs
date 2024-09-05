@@ -21,11 +21,6 @@ public class BindData<T>
         }
     }
 
-    public void SetData(T _data)
-    {
-        data = _data;
-    }
-
     public void SetBind(Bind _bind)
     {
         bind = _bind;

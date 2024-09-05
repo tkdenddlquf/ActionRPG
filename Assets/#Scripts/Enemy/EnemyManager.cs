@@ -12,11 +12,11 @@ public class EnemyManager : HitBase
 
         Init("Character");
 
-        AnimBehaviour[] _animBehaviours = Animator.GetBehaviours<AnimBehaviour>();
+        AnimStateMachine[] _animBehaviours = Animator.GetBehaviours<AnimStateMachine>();
 
-        foreach (AnimBehaviour _animBehaviour in _animBehaviours) _animBehaviour.Init(transform, this);
+        foreach (AnimStateMachine _animBehaviour in _animBehaviours) _animBehaviour.Init(transform, this);
 
-        commonInfo.Hp.SetBind(HpBind);
+        commonInfo.hp.SetBind(HpBind);
     }
 
     private void Update()
@@ -36,7 +36,7 @@ public class EnemyManager : HitBase
         if (isBoss)
         {
             GameManager._instance.bossPanel.Target = this;
-            GameManager._instance.bossPanel.SetHp((float)_current / commonInfo.MaxHp.Data);
+            GameManager._instance.bossPanel.SetHp((float)_current / commonInfo.maxHp.Data);
         }
 
         if (_current <= 0)
@@ -54,8 +54,8 @@ public class EnemyManager : HitBase
 
         if (LookTarget == null) LookTarget = _hitBase.gameObject;
 
-        if (AnimState.guard) commonInfo.Hp.Data -= _hitBase.commonInfo.Atk.Data / 2;
-        else commonInfo.Hp.Data -= _hitBase.commonInfo.Atk.Data;
+        if (AnimState.guard) commonInfo.hp.Data -= _hitBase.commonInfo.atk.Data / 2;
+        else commonInfo.hp.Data -= _hitBase.commonInfo.atk.Data;
 
         return true;
     }
@@ -64,7 +64,7 @@ public class EnemyManager : HitBase
     {
         if (LookTarget == _hitBase.gameObject) // 추적중인 경우
         {
-            if (_hitBase.commonInfo.Hp.Data == 0) // 대상이 사망한 경우
+            if (_hitBase.commonInfo.hp.Data == 0) // 대상이 사망한 경우
             {
                 LookTarget = null;
             }

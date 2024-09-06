@@ -16,9 +16,9 @@ public class CharManager : HitBase
 
         foreach (AnimStateMachine _animBehaviour in _animBehaviours) _animBehaviour.Init(GameManager._instance.cam.transform, this);
 
-        commonInfo.hp.SetBind(HpBind);
-        commonInfo.mp.SetBind(MpBind);
-        commonInfo.energy.SetBind(EnergyBind);
+        commonInfo.hp[0].SetBind(HpBind);
+        commonInfo.mp[0].SetBind(MpBind);
+        commonInfo.energy[0].SetBind(EnergyBind);
     }
 
     private void Update()
@@ -33,7 +33,7 @@ public class CharManager : HitBase
 
         _current = _change;
 
-        GameManager._instance.charPanel.hp.value = (float)_current / commonInfo.maxHp.Data;
+        GameManager._instance.charPanel.hp.value = (float)_current / commonInfo.hp[1].Data;
 
         if (_current <= 0)
         {
@@ -47,14 +47,14 @@ public class CharManager : HitBase
     {
         _current = _change;
 
-        GameManager._instance.charPanel.mp.value = (float)_current / commonInfo.maxMp.Data;
+        GameManager._instance.charPanel.mp.value = (float)_current / commonInfo.mp[1].Data;
     }
 
     private void EnergyBind(ref int _current, int _change)
     {
         _current = _change;
 
-        GameManager._instance.charPanel.energy.value = (float)_current / commonInfo.maxEnergy.Data;
+        GameManager._instance.charPanel.energy.value = (float)_current / commonInfo.energy[1].Data;
     }
 
     // 상속
@@ -62,8 +62,8 @@ public class CharManager : HitBase
     {
         if (AnimState.roll) return false; // 구르는 중인 경우 회피
 
-        if (AnimState.guard) commonInfo.hp.Data -= _hitBase.commonInfo.atk.Data / 2;
-        else commonInfo.hp.Data -= _hitBase.commonInfo.atk.Data;
+        if (AnimState.guard) commonInfo.hp[0].Data -= _hitBase.commonInfo.atk.Data / 2;
+        else commonInfo.hp[0].Data -= _hitBase.commonInfo.atk.Data;
 
         return true;
     }
@@ -72,7 +72,7 @@ public class CharManager : HitBase
     {
         if (LookTarget == _hitBase.gameObject) // 추적중인 경우
         {
-            if (_hitBase.commonInfo.hp.Data == 0) // 대상이 사망한 경우
+            if (_hitBase.commonInfo.hp[0].Data == 0) // 대상이 사망한 경우
             {
                 LookTarget = null;
             }

@@ -23,7 +23,9 @@ public class AnimStateMachine : StateMachineBehaviour
         {
             case AnimState.Attack:
                 hitBase.SetGuid();
-                hitBase.commonInfo.energy.Data -= 10;
+                hitBase.commonInfo.energy[0].Data -= 10;
+
+                hitBase.transform.rotation = Quaternion.Slerp(hitBase.transform.rotation, Angle, 0.05f);
                 break;
 
             case AnimState.Guard:
@@ -36,33 +38,34 @@ public class AnimStateMachine : StateMachineBehaviour
 
                 if (MoveDir != Vector3.zero) hitBase.transform.rotation = Quaternion.LookRotation(MoveDir) * Angle;
                 break;
+
+            case AnimState.Hit:
+                _animator.SetBool("Hit", false);
+                break;
         }
     }
 
     public override void OnStateUpdate(Animator _animator, AnimatorStateInfo _stateInfo, int _layerIndex)
     {
-        _animator.SetBool("Hit", false);
-
         switch (thisState)
         {
             case AnimState.Attack:
-                hitBase.transform.rotation = Quaternion.Slerp(hitBase.transform.rotation, Angle, 0.3f * Time.deltaTime);
                 hitBase.CheckHit();
                 break;
 
             case AnimState.Walk:
                 if (MoveDir != Vector3.zero)
                 {
-                    hitBase.transform.position += Quaternion.Euler(0, look.eulerAngles.y, 0) * MoveDir * hitBase.commonInfo.moveSpeed.Data * Time.deltaTime;
-                    hitBase.transform.rotation = Quaternion.Slerp(hitBase.transform.rotation, Quaternion.LookRotation(MoveDir) * Angle, 15 * Time.deltaTime);
+                    hitBase.transform.rotation = Quaternion.Slerp(hitBase.transform.rotation, Quaternion.LookRotation(MoveDir) * Angle, 0.1f);
+                    hitBase.Rigidbody.AddRelativeForce(50 * hitBase.commonInfo.moveSpeed.Data * Vector3.forward);
                 }
                 break;
 
             case AnimState.Run:
                 if (MoveDir != Vector3.zero)
                 {
-                    hitBase.transform.position += Quaternion.Euler(0, look.eulerAngles.y, 0) * MoveDir * hitBase.commonInfo.moveSpeed.Data * 2 * Time.deltaTime;
-                    hitBase.transform.rotation = Quaternion.Slerp(hitBase.transform.rotation, Quaternion.LookRotation(MoveDir) * Angle, 15 * Time.deltaTime);
+                    hitBase.transform.rotation = Quaternion.Slerp(hitBase.transform.rotation, Quaternion.LookRotation(MoveDir) * Angle, 0.1f);
+                    hitBase.Rigidbody.AddRelativeForce(100 * hitBase.commonInfo.moveSpeed.Data * Vector3.forward);
                 }
                 break;
 
@@ -70,8 +73,7 @@ public class AnimStateMachine : StateMachineBehaviour
                 if (_stateInfo.normalizedTime < 0.5f) time += Time.deltaTime;
                 else time -= Time.deltaTime;
 
-                if (MoveDir != Vector3.zero) hitBase.transform.position += Quaternion.Euler(0, look.eulerAngles.y, 0) * MoveDir * time * 0.7f;
-                else hitBase.transform.position += 0.7f * time * hitBase.transform.forward;
+                hitBase.Rigidbody.AddRelativeForce(1200f * time * Vector3.forward);
                 break;
         }
     }

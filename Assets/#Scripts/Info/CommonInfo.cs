@@ -3,12 +3,9 @@ using System;
 [Serializable]
 public class CommonInfo
 {
-    public BindData<int> hp = new();
-    public BindData<int> maxHp = new();
-    public BindData<int> mp = new();
-    public BindData<int> maxMp = new();
-    public BindData<int> energy = new();
-    public BindData<int> maxEnergy = new();
+    public BindData<int>[] hp = new BindData<int>[2];
+    public BindData<int>[] mp = new BindData<int>[2];
+    public BindData<int>[] energy = new BindData<int>[2];
     public BindData<int> atk = new();
     public BindData<float> attackSpeed = new();
     public BindData<float> moveSpeed = new();

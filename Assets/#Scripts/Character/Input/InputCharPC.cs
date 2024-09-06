@@ -23,14 +23,10 @@ public class InputCharPC : InputBase
             case AnimState.Idle:
                 if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0) // 이동
                 {
-                    if (Input.GetKey(KeyCode.LeftAlt)) character.AnimState.StateRecord = AnimState.Walk;
-                    else character.AnimState.StateRecord = AnimState.Run;
+                    if (Input.GetKey(KeyCode.LeftAlt)) character.Animator.SetFloat("MoveSpeed", 0.5f, 1f, 0.1f);
+                    else character.Animator.SetFloat("MoveSpeed", 1, 1f, 0.1f);
                 }
-                break;
-
-            case AnimState.Walk:
-            case AnimState.Run:
-                if (Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0) character.AnimState.StateRecord = AnimState.Idle;
+                else character.Animator.SetFloat("MoveSpeed", 0, 1f, 0.1f);
                 break;
 
             case AnimState.Attack:

@@ -17,6 +17,7 @@ public class EnemyManager : HitBase
         foreach (AnimStateMachine _animBehaviour in _animBehaviours) _animBehaviour.Init(transform, this);
 
         commonInfo.hp[0].SetBind(HpBind);
+        commonInfo.attackSpeed.SetBind(AttackSpeedBind);
     }
 
     private void Update()
@@ -45,6 +46,13 @@ public class EnemyManager : HitBase
 
             Die();
         }
+    }
+
+    private void AttackSpeedBind(ref float _current, float _change)
+    {
+        _current = _change;
+
+        Animator.SetFloat("AttackSpeed", _current);
     }
 
     // 상속

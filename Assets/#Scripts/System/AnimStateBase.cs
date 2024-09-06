@@ -48,9 +48,7 @@ public enum AnimState
 {
     Idle,
     Attack,
-    Walk,
     Guard,
-    Run,
     Roll,
     Hit
 }

@@ -19,6 +19,7 @@ public class CharManager : HitBase
         commonInfo.hp[0].SetBind(HpBind);
         commonInfo.mp[0].SetBind(MpBind);
         commonInfo.energy[0].SetBind(EnergyBind);
+        commonInfo.attackSpeed.SetBind(AttackSpeedBind);
     }
 
     private void Update()
@@ -55,6 +56,13 @@ public class CharManager : HitBase
         _current = _change;
 
         GameManager._instance.charPanel.energy.value = (float)_current / commonInfo.energy[1].Data;
+    }
+
+    private void AttackSpeedBind(ref float _current, float _change)
+    {
+        _current = _change;
+
+        Animator.SetFloat("AttackSpeed", _current);
     }
 
     // 상속

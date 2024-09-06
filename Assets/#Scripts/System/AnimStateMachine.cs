@@ -53,19 +53,11 @@ public class AnimStateMachine : StateMachineBehaviour
                 hitBase.CheckHit();
                 break;
 
-            case AnimState.Walk:
+            case AnimState.Idle:
                 if (MoveDir != Vector3.zero)
                 {
                     hitBase.transform.rotation = Quaternion.Slerp(hitBase.transform.rotation, Quaternion.LookRotation(MoveDir) * Angle, 0.1f);
-                    hitBase.Rigidbody.AddRelativeForce(50 * hitBase.commonInfo.moveSpeed.Data * Vector3.forward);
-                }
-                break;
-
-            case AnimState.Run:
-                if (MoveDir != Vector3.zero)
-                {
-                    hitBase.transform.rotation = Quaternion.Slerp(hitBase.transform.rotation, Quaternion.LookRotation(MoveDir) * Angle, 0.1f);
-                    hitBase.Rigidbody.AddRelativeForce(100 * hitBase.commonInfo.moveSpeed.Data * Vector3.forward);
+                    hitBase.Rigidbody.AddRelativeForce(100 * _animator.GetFloat("MoveSpeed") * hitBase.commonInfo.moveSpeed.Data * Vector3.forward);
                 }
                 break;
 

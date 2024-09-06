@@ -28,9 +28,11 @@ public class EnemyManager : HitBase
     // 데이터 바인드
     private void HpBind(ref int _current, int _change)
     {
-        if (_current > _change) Animator.SetBool("Hit", true);
+        if (_change < 0) _change = 0;
 
         if (_current == _change) return;
+
+        if (_current > _change) Animator.SetBool("Hit", true);
 
         _current = _change;
 
@@ -40,12 +42,7 @@ public class EnemyManager : HitBase
             GameManager._instance.bossPanel.SetHp((float)_current / commonInfo.hp[1].Data);
         }
 
-        if (_current <= 0)
-        {
-            _current = 0;
-
-            Die();
-        }
+        if (_current == 0) Die();
     }
 
     private void AttackSpeedBind(ref float _current, float _change)

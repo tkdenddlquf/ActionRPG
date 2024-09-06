@@ -30,18 +30,17 @@ public class CharManager : HitBase
     // 데이터 바인드
     private void HpBind(ref int _current, int _change)
     {
+        if (_change < 0) _change = 0;
+
+        if (_current == _change) return;
+
         if (_current > _change) Animator.SetBool("Hit", true);
 
         _current = _change;
 
         GameManager._instance.charPanel.hp.value = (float)_current / commonInfo.hp[1].Data;
 
-        if (_current <= 0)
-        {
-            _current = 0;
-
-            Die();
-        }
+        if (_current == 0) Die();
     }
 
     private void MpBind(ref int _current, int _change)

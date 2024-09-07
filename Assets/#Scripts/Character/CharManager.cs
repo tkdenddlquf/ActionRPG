@@ -31,8 +31,7 @@ public class CharManager : HitBase
     private void HpBind(ref int _current, int _change)
     {
         if (_change < 0) _change = 0;
-
-        if (_current == _change) return;
+        else if (_change > commonInfo.hp[1].Data) _change = commonInfo.hp[1].Data;
 
         if (_current > _change) Animator.SetBool("Hit", true);
 
@@ -45,6 +44,9 @@ public class CharManager : HitBase
 
     private void MpBind(ref int _current, int _change)
     {
+        if (_change < 0) _change = 0;
+        else if (_change > commonInfo.mp[1].Data) _change = commonInfo.mp[1].Data;
+
         _current = _change;
 
         GameManager._instance.charPanel.mp.value = (float)_current / commonInfo.mp[1].Data;
@@ -52,6 +54,9 @@ public class CharManager : HitBase
 
     private void EnergyBind(ref int _current, int _change)
     {
+        if (_change < 0) _change = 0;
+        else if (_change > commonInfo.energy[1].Data) _change = commonInfo.energy[1].Data;
+
         _current = _change;
 
         GameManager._instance.charPanel.energy.value = (float)_current / commonInfo.energy[1].Data;
@@ -67,9 +72,9 @@ public class CharManager : HitBase
     // 상속
     protected override bool HitAction(HitBase _hitBase) // 피격
     {
-        if (AnimState.roll) return false; // 구르는 중인 경우 회피
+        if (AnimStateBase.roll) return false; // 구르는 중인 경우 회피
 
-        if (AnimState.guard) commonInfo.hp[0].Data -= _hitBase.commonInfo.atk.Data / 2;
+        if (AnimStateBase.guard) commonInfo.hp[0].Data -= _hitBase.commonInfo.atk.Data / 2;
         else commonInfo.hp[0].Data -= _hitBase.commonInfo.atk.Data;
 
         return true;
@@ -107,5 +112,33 @@ public class CharManager : HitBase
             GameManager._instance.cineCam.LookAt = LookTarget.transform;
             GameManager._instance.cineCam.Priority = 1;
         }
+    }
+
+    public override bool UseEnergy(AnimState _state, bool _check = false)
+    {
+        switch (_state)
+        {
+            case AnimState.Idle:
+                if (_check) return true;
+                else commonInfo.energy[0].Data += 1;
+                break;
+
+            case AnimState.Attack:
+                if (_check) return commonInfo.energy[0].Data - 100 >= 0;
+                else commonInfo.energy[0].Data -= 100;
+                break;
+
+            case AnimState.Guard:
+                if (_check) return commonInfo.energy[0].Data - 1 >= 0;
+                else commonInfo.energy[0].Data -= 1;
+                break;
+
+            case AnimState.Roll:
+                if (_check) return commonInfo.energy[0].Data - 100 >= 0;
+                else commonInfo.energy[0].Data -= 100;
+                break;
+        }
+
+        return true;
     }
 }

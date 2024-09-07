@@ -23,10 +23,10 @@ public abstract class HitBase : MonoBehaviour
 
     // 애니메이션 및 상태
     private Animator animator;
-    private AnimStateBase animState;
+    private AnimStateBase animStateBase;
 
     public Animator Animator => animator;
-    public AnimStateBase AnimState => animState;
+    public AnimStateBase AnimStateBase => animStateBase;
     public Rigidbody Rigidbody => rb;
 
     public GameObject LookTarget
@@ -50,13 +50,14 @@ public abstract class HitBase : MonoBehaviour
         hit.hitAction = HitAction;
 
         TryGetComponent(out animator);
-        animState = new(animator);
+        animStateBase = new(animator);
 
         mask = LayerMask.GetMask(_layers);
 
         SetGuid();
     }
 
+    // 상속
     protected abstract bool HitAction(HitBase _hitBase); // 피격
 
     protected abstract void AttackCallback(HitBase _hitBase); // 공격 성공
@@ -68,18 +69,24 @@ public abstract class HitBase : MonoBehaviour
 
     }
 
-    public void SetGuid()
+    public virtual bool UseEnergy(AnimState _state, bool _check = false)
+    {
+        return true;
+    }
+
+    // 기본
+    public void SetGuid() // 공격 고유 번호
     {
         guid = System.Guid.NewGuid();
     }
 
-    public void SetTarget()
+    public void SetTarget() // 대상 변경
     {
         if (LookTarget != null) LookTarget = null;
         else if (Physics.Raycast(GameManager._instance.cam.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 100, mask)) LookTarget = hit.transform.gameObject;
     }
 
-    public void CheckHit()
+    public void CheckHit() // 공격 확인
     {
         if (!attack.activeSelf) return;
 

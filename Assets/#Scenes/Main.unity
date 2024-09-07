@@ -5172,16 +5172,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   commonInfo:
     hp:
-    - data: 100
-    - data: 100
+    - data: 3000
+    - data: 3000
     mp:
-    - data: 80
-    - data: 80
+    - data: 1700
+    - data: 1700
     energy:
-    - data: 90
-    - data: 90
+    - data: 2000
+    - data: 2000
     atk:
-      data: 10
+      data: 200
     attackSpeed:
       data: 1
     moveSpeed:

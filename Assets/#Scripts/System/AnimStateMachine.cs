@@ -23,18 +23,20 @@ public class AnimStateMachine : StateMachineBehaviour
         {
             case AnimState.Attack:
                 hitBase.SetGuid();
-                hitBase.commonInfo.energy[0].Data -= 10;
+                hitBase.UseEnergy(thisState);
 
                 hitBase.transform.rotation = Quaternion.Slerp(hitBase.transform.rotation, Angle, 0.05f);
                 break;
 
             case AnimState.Guard:
-                hitBase.AnimState.guard = true;
+                hitBase.AnimStateBase.guard = true;
                 break;
 
             case AnimState.Roll:
-                hitBase.AnimState.roll = true;
+                hitBase.AnimStateBase.roll = true;
                 time = 0;
+
+                hitBase.UseEnergy(thisState);
 
                 if (MoveDir != Vector3.zero) hitBase.transform.rotation = Quaternion.LookRotation(MoveDir) * Angle;
                 break;
@@ -49,23 +51,31 @@ public class AnimStateMachine : StateMachineBehaviour
     {
         switch (thisState)
         {
+            case AnimState.Idle:
+                if (MoveDir == Vector3.zero)
+                {
+                    if (_stateInfo.normalizedTime > 1f) hitBase.UseEnergy(thisState);
+                }
+                else
+                {
+                    hitBase.transform.rotation = Quaternion.Slerp(hitBase.transform.rotation, Quaternion.LookRotation(MoveDir) * Angle, 0.2f);
+                    hitBase.Rigidbody.AddRelativeForce(100 * _animator.GetFloat("MoveSpeed") * hitBase.commonInfo.moveSpeed.Data * Vector3.forward);
+                }
+                break;
+
             case AnimState.Attack:
                 hitBase.CheckHit();
                 break;
 
-            case AnimState.Idle:
-                if (MoveDir != Vector3.zero)
-                {
-                    hitBase.transform.rotation = Quaternion.Slerp(hitBase.transform.rotation, Quaternion.LookRotation(MoveDir) * Angle, 0.1f);
-                    hitBase.Rigidbody.AddRelativeForce(100 * _animator.GetFloat("MoveSpeed") * hitBase.commonInfo.moveSpeed.Data * Vector3.forward);
-                }
+            case AnimState.Guard:
+                hitBase.UseEnergy(thisState);
                 break;
 
             case AnimState.Roll:
                 if (_stateInfo.normalizedTime < 0.5f) time += Time.deltaTime;
                 else time -= Time.deltaTime;
 
-                hitBase.Rigidbody.AddRelativeForce(1200f * time * Vector3.forward);
+                hitBase.Rigidbody.AddRelativeForce(1300f * time * Vector3.forward);
                 break;
         }
     }
@@ -75,11 +85,11 @@ public class AnimStateMachine : StateMachineBehaviour
         switch (thisState)
         {
             case AnimState.Guard:
-                if (hitBase.AnimState.State != thisState) hitBase.AnimState.guard = false;
+                if (hitBase.AnimStateBase.State != thisState) hitBase.AnimStateBase.guard = false;
                 break;
 
             case AnimState.Roll:
-                hitBase.AnimState.roll = false;
+                hitBase.AnimStateBase.roll = false;
                 break;
         }
     }

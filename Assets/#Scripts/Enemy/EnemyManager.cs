@@ -29,14 +29,13 @@ public class EnemyManager : HitBase
     private void HpBind(ref int _current, int _change)
     {
         if (_change < 0) _change = 0;
-
-        if (_current == _change) return;
+        else if (_change > commonInfo.hp[1].Data) _change = commonInfo.hp[1].Data;
 
         if (_current > _change) Animator.SetBool("Hit", true);
 
         _current = _change;
 
-        if (isBoss)
+        if (isBoss && LookTarget != null)
         {
             GameManager._instance.bossPanel.Target = this;
             GameManager._instance.bossPanel.SetHp((float)_current / commonInfo.hp[1].Data);
@@ -55,11 +54,11 @@ public class EnemyManager : HitBase
     // 상속
     protected override bool HitAction(HitBase _hitBase) // 피격
     {
-        if (AnimState.roll) return false; // 구르는 중인 경우 회피
+        if (AnimStateBase.roll) return false; // 구르는 중인 경우 회피
 
         if (LookTarget == null) LookTarget = _hitBase.gameObject;
 
-        if (AnimState.guard) commonInfo.hp[0].Data -= _hitBase.commonInfo.atk.Data / 2;
+        if (AnimStateBase.guard) commonInfo.hp[0].Data -= _hitBase.commonInfo.atk.Data / 2;
         else commonInfo.hp[0].Data -= _hitBase.commonInfo.atk.Data;
 
         return true;

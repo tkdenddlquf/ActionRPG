@@ -37,7 +37,7 @@ public class CharManager : HitBase
 
         _current = _change;
 
-        GameManager._instance.charPanel.hp.value = (float)_current / commonInfo.hp[1].Data;
+        GameManager._instance.charPanel.hp.SetData(sliderAction, (float)_current / commonInfo.hp[1].Data);
 
         if (_current == 0) Die();
     }
@@ -49,7 +49,7 @@ public class CharManager : HitBase
 
         _current = _change;
 
-        GameManager._instance.charPanel.mp.value = (float)_current / commonInfo.mp[1].Data;
+        GameManager._instance.charPanel.mp.SetData(sliderAction, (float)_current / commonInfo.mp[1].Data);
     }
 
     private void EnergyBind(ref int _current, int _change)
@@ -59,7 +59,7 @@ public class CharManager : HitBase
 
         _current = _change;
 
-        GameManager._instance.charPanel.energy.value = (float)_current / commonInfo.energy[1].Data;
+        GameManager._instance.charPanel.energy.SetData(sliderAction, (float)_current / commonInfo.energy[1].Data);
     }
 
     private void AttackSpeedBind(ref float _current, float _change)
@@ -75,24 +75,16 @@ public class CharManager : HitBase
         switch (_state)
         {
             case AnimState.Idle:
-                if (_check) return true;
-                else commonInfo.energy[0].Data += 1;
-                break;
+                return UseEnergy(-1, _check);
 
             case AnimState.Attack:
-                if (_check) return commonInfo.energy[0].Data - 100 >= 0;
-                else commonInfo.energy[0].Data -= 100;
-                break;
+                return UseEnergy(100, _check);
 
             case AnimState.Guard:
-                if (_check) return commonInfo.energy[0].Data - 1 >= 0;
-                else commonInfo.energy[0].Data -= 1;
-                break;
+                return UseEnergy(1, _check);
 
             case AnimState.Roll:
-                if (_check) return commonInfo.energy[0].Data - 100 >= 0;
-                else commonInfo.energy[0].Data -= 100;
-                break;
+                return UseEnergy(100, _check);
         }
 
         return true;

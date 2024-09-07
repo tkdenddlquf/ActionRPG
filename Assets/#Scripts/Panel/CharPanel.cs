@@ -1,9 +1,8 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CharPanel : MonoBehaviour
 {
-    public Slider hp;
-    public Slider mp;
-    public Slider energy;
+    public LerpSlider hp;
+    public LerpSlider mp;
+    public LerpSlider energy;
 }

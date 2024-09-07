@@ -1,11 +1,10 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class BossPanel : MonoBehaviour
 {
     public TMP_Text thisName;
-    public Slider hp;
+    public LerpSlider hp;
 
     private EnemyManager target;
 
@@ -28,8 +27,8 @@ public class BossPanel : MonoBehaviour
 
     public void SetHp(float _value)
     {
-        hp.value = _value;
+        hp.SetData(target.sliderAction, _value);
 
-        if (hp.value == 0) Target = null;
+        if (_value == 0) Target = null;
     }
 }

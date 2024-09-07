@@ -4,6 +4,7 @@ public abstract class HitBase : MonoBehaviour
 {
     // STATUS
     public CommonInfo commonInfo;
+    public LerpSliderAction sliderAction = new();
 
     public GameObject attack;
 
@@ -57,6 +58,11 @@ public abstract class HitBase : MonoBehaviour
         SetGuid();
     }
 
+    private void FixedUpdate()
+    {
+        sliderAction.actions?.Invoke();
+    }
+
     // 상속
     public virtual bool UseEnergy(AnimState _state, bool _check = false)
     {
@@ -77,12 +83,9 @@ public abstract class HitBase : MonoBehaviour
 
     protected virtual void AttackCallback(HitBase _hitBase) // 공격 성공
     {
-        if (LookTarget == _hitBase.gameObject) // 추적중인 경우
+        if (_hitBase.commonInfo.hp[0].Data == 0) // 대상이 사망한 경우
         {
-            if (_hitBase.commonInfo.hp[0].Data == 0) // 대상이 사망한 경우
-            {
-                LookTarget = null;
-            }
+            if (LookTarget == _hitBase.gameObject) LookTarget = null; // 추적중인 경우
         }
         else if (LookTarget == null) LookTarget = _hitBase.gameObject;
     }
@@ -121,5 +124,13 @@ public abstract class HitBase : MonoBehaviour
         {
             if (hits[i].collider.gameObject.TryGetComponent(out target)) target.Hit(guid, this, AttackCallback);
         }
+    }
+
+    protected bool UseEnergy(int _value, bool _check)
+    {
+        if (_check) return commonInfo.energy[0].Data - _value >= 0;
+        else commonInfo.energy[0].Data -= _value;
+
+        return true;
     }
 }

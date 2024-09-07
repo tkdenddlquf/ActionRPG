@@ -642,9 +642,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da8ccb64a86f9aa40a462dc2e9f3e3eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: {fileID: 877214372}
-  mp: {fileID: 618152201}
-  energy: {fileID: 2059914415}
+  hp:
+    slider: {fileID: 877214372}
+  mp:
+    slider: {fileID: 618152201}
+  energy:
+    slider: {fileID: 2059914415}
 --- !u!1 &345480641
 GameObject:
   m_ObjectHideFlags: 0
@@ -2756,7 +2759,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thisName: {fileID: 765239300}
-  hp: {fileID: 537086322}
+  hp:
+    slider: {fileID: 537086322}
 --- !u!1 &2013410473
 GameObject:
   m_ObjectHideFlags: 1

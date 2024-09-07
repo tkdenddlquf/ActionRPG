@@ -52,19 +52,22 @@ public class AnimStateMachine : StateMachineBehaviour
         switch (thisState)
         {
             case AnimState.Idle:
-                if (MoveDir == Vector3.zero)
+                if (_animator.GetInteger("State") == 0)
                 {
                     if (_stateInfo.normalizedTime > 1f) hitBase.UseEnergy(thisState);
                 }
-                else
+
+                if (MoveDir != Vector3.zero)
                 {
-                    hitBase.transform.rotation = Quaternion.Slerp(hitBase.transform.rotation, Quaternion.LookRotation(MoveDir) * Angle, 0.2f);
+                    hitBase.transform.rotation = Quaternion.Slerp(hitBase.transform.rotation, Quaternion.LookRotation(MoveDir) * Angle, 0.5f);
                     hitBase.Rigidbody.AddRelativeForce(100 * _animator.GetFloat("MoveSpeed") * hitBase.commonInfo.moveSpeed.Data * Vector3.forward);
                 }
                 break;
 
             case AnimState.Attack:
                 hitBase.CheckHit();
+
+                _animator.SetBool("Hit", false);
                 break;
 
             case AnimState.Guard:
@@ -76,6 +79,8 @@ public class AnimStateMachine : StateMachineBehaviour
                 else time -= Time.deltaTime;
 
                 hitBase.Rigidbody.AddRelativeForce(1300f * time * Vector3.forward);
+
+                _animator.SetBool("Hit", false);
                 break;
         }
     }

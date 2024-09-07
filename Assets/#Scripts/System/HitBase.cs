@@ -58,20 +58,45 @@ public abstract class HitBase : MonoBehaviour
     }
 
     // 상속
-    protected abstract bool HitAction(HitBase _hitBase); // 피격
+    public virtual bool UseEnergy(AnimState _state, bool _check = false)
+    {
+        return true;
+    }
 
-    protected abstract void AttackCallback(HitBase _hitBase); // 공격 성공
+    protected virtual bool HitAction(HitBase _hitBase) // 피격
+    {
+        if (AnimStateBase.roll) return false; // 구르는 중인 경우 회피
 
-    protected abstract void Die(); // 사망
+        if (LookTarget == null) LookTarget = _hitBase.gameObject;
+
+        if (AnimStateBase.guard) commonInfo.hp[0].Data -= _hitBase.commonInfo.atk.Data / 2;
+        else commonInfo.hp[0].Data -= _hitBase.commonInfo.atk.Data;
+
+        return true;
+    }
+
+    protected virtual void AttackCallback(HitBase _hitBase) // 공격 성공
+    {
+        if (LookTarget == _hitBase.gameObject) // 추적중인 경우
+        {
+            if (_hitBase.commonInfo.hp[0].Data == 0) // 대상이 사망한 경우
+            {
+                LookTarget = null;
+            }
+        }
+        else if (LookTarget == null) LookTarget = _hitBase.gameObject;
+    }
+
+    protected virtual void Die() // 사망
+    {
+        Animator.SetBool("Die", true);
+
+        LookTarget = null;
+    }
 
     protected virtual void LookTargetCallback()
     {
 
-    }
-
-    public virtual bool UseEnergy(AnimState _state, bool _check = false)
-    {
-        return true;
     }
 
     // 기본

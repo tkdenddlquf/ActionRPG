@@ -52,36 +52,6 @@ public class EnemyManager : HitBase
     }
 
     // 상속
-    protected override bool HitAction(HitBase _hitBase) // 피격
-    {
-        if (AnimStateBase.roll) return false; // 구르는 중인 경우 회피
-
-        if (LookTarget == null) LookTarget = _hitBase.gameObject;
-
-        if (AnimStateBase.guard) commonInfo.hp[0].Data -= _hitBase.commonInfo.atk.Data / 2;
-        else commonInfo.hp[0].Data -= _hitBase.commonInfo.atk.Data;
-
-        return true;
-    }
-
-    protected override void AttackCallback(HitBase _hitBase)
-    {
-        if (LookTarget == _hitBase.gameObject) // 추적중인 경우
-        {
-            if (_hitBase.commonInfo.hp[0].Data == 0) // 대상이 사망한 경우
-            {
-                LookTarget = null;
-            }
-        }
-    }
-
-    protected override void Die()
-    {
-        Animator.SetBool("Die", true);
-
-        LookTarget = null;
-    }
-
     protected override void LookTargetCallback()
     {
         if (LookTarget == null) // 추적이 해제된 경우

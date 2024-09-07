@@ -70,50 +70,6 @@ public class CharManager : HitBase
     }
 
     // 상속
-    protected override bool HitAction(HitBase _hitBase) // 피격
-    {
-        if (AnimStateBase.roll) return false; // 구르는 중인 경우 회피
-
-        if (AnimStateBase.guard) commonInfo.hp[0].Data -= _hitBase.commonInfo.atk.Data / 2;
-        else commonInfo.hp[0].Data -= _hitBase.commonInfo.atk.Data;
-
-        return true;
-    }
-
-    protected override void AttackCallback(HitBase _hitBase) // 공격 성공
-    {
-        if (LookTarget == _hitBase.gameObject) // 추적중인 경우
-        {
-            if (_hitBase.commonInfo.hp[0].Data == 0) // 대상이 사망한 경우
-            {
-                LookTarget = null;
-            }
-        }
-    }
-
-    protected override void Die()
-    {
-        Animator.SetBool("Die", true);
-
-        LookTarget = null;
-    }
-
-    protected override void LookTargetCallback()
-    {
-        if (LookTarget == null)
-        {
-            GameManager._instance.cineOrbit.HorizontalAxis.Value = GameManager._instance.cam.transform.eulerAngles.y;
-            GameManager._instance.cineOrbit.VerticalAxis.Value = GameManager._instance.cam.transform.eulerAngles.x + 17.5f;
-
-            GameManager._instance.cineCam.Priority = -1;
-        }
-        else
-        {
-            GameManager._instance.cineCam.LookAt = LookTarget.transform;
-            GameManager._instance.cineCam.Priority = 1;
-        }
-    }
-
     public override bool UseEnergy(AnimState _state, bool _check = false)
     {
         switch (_state)
@@ -140,5 +96,21 @@ public class CharManager : HitBase
         }
 
         return true;
+    }
+
+    protected override void LookTargetCallback()
+    {
+        if (LookTarget == null)
+        {
+            GameManager._instance.cineOrbit.HorizontalAxis.Value = GameManager._instance.cam.transform.eulerAngles.y;
+            GameManager._instance.cineOrbit.VerticalAxis.Value = GameManager._instance.cam.transform.eulerAngles.x + 17.5f;
+
+            GameManager._instance.cineCam.Priority = -1;
+        }
+        else
+        {
+            GameManager._instance.cineCam.LookAt = LookTarget.transform;
+            GameManager._instance.cineCam.Priority = 1;
+        }
     }
 }

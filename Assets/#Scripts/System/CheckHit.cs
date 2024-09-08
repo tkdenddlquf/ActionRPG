@@ -4,7 +4,6 @@ public class CheckHit : MonoBehaviour
 {
     public HitAction hitAction;
 
-    private System.Guid targetGuid = new();
     private HitBase hitBase;
 
     public delegate bool HitAction(HitBase _hitBase); // 공격 당한경우 실행
@@ -15,12 +14,8 @@ public class CheckHit : MonoBehaviour
         TryGetComponent(out hitBase);
     }
 
-    public void Hit(System.Guid _guid, HitBase _hitBase, AttackCallback _callback)
+    public void Hit(HitBase _hitBase, AttackCallback _callback)
     {
-        if (targetGuid == _guid) return;
-
-        targetGuid = _guid;
-
         if (hitAction(_hitBase)) _callback(hitBase);
     }
 }

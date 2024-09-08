@@ -22,7 +22,6 @@ public class AnimStateMachine : StateMachineBehaviour
         switch (thisState)
         {
             case AnimState.Attack:
-                hitBase.SetGuid();
                 hitBase.UseEnergy(thisState);
 
                 hitBase.transform.rotation = Quaternion.Slerp(hitBase.transform.rotation, Angle, 0.05f);
@@ -65,7 +64,7 @@ public class AnimStateMachine : StateMachineBehaviour
                 break;
 
             case AnimState.Attack:
-                hitBase.CheckHit();
+                hitBase.CheckHit(1f);
 
                 _animator.SetBool("Hit", false);
                 break;
@@ -75,8 +74,8 @@ public class AnimStateMachine : StateMachineBehaviour
                 break;
 
             case AnimState.Roll:
-                if (_stateInfo.normalizedTime < 0.5f) time += Time.deltaTime;
-                else time -= Time.deltaTime;
+                if (_stateInfo.normalizedTime < 0.3f) time += 0.04f;
+                else if (time > 0.02f) time -= 0.02f;
 
                 hitBase.Rigidbody.AddRelativeForce(1300f * time * Vector3.forward);
 

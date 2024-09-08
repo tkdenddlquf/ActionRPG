@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public abstract class HitBase : MonoBehaviour
 {
@@ -12,10 +13,10 @@ public abstract class HitBase : MonoBehaviour
     private Rigidbody rb;
 
     // 대상
-    private System.Guid guid;
+    private LayerMask mask;
     private CheckHit target;
     private GameObject lookTarget;
-    private LayerMask mask;
+    private readonly Dictionary<GameObject, float> attackDelays = new();
 
     // 공격확인 및 범위
     private int hitCount;
@@ -54,8 +55,6 @@ public abstract class HitBase : MonoBehaviour
         animStateBase = new(animator);
 
         mask = LayerMask.GetMask(_layers);
-
-        SetGuid();
     }
 
     private void FixedUpdate()
@@ -83,8 +82,12 @@ public abstract class HitBase : MonoBehaviour
 
     protected virtual void AttackCallback(HitBase _hitBase) // 공격 성공
     {
+        attackDelays[_hitBase.gameObject] = Time.time;
+
         if (_hitBase.commonInfo.hp[0].Data == 0) // 대상이 사망한 경우
         {
+            attackDelays.Remove(_hitBase.gameObject);
+
             if (LookTarget == _hitBase.gameObject) LookTarget = null; // 추적중인 경우
         }
         else if (LookTarget == null) LookTarget = _hitBase.gameObject;
@@ -103,18 +106,13 @@ public abstract class HitBase : MonoBehaviour
     }
 
     // 기본
-    public void SetGuid() // 공격 고유 번호
-    {
-        guid = System.Guid.NewGuid();
-    }
-
     public void SetTarget() // 대상 변경
     {
         if (LookTarget != null) LookTarget = null;
         else if (Physics.Raycast(GameManager._instance.cam.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 100, mask)) LookTarget = hit.transform.gameObject;
     }
 
-    public void CheckHit() // 공격 확인
+    public void CheckHit(float _delay) // 공격 확인
     {
         if (!attack.activeSelf) return;
 
@@ -122,7 +120,12 @@ public abstract class HitBase : MonoBehaviour
 
         for (int i = 0; i < hitCount; i++)
         {
-            if (hits[i].collider.gameObject.TryGetComponent(out target)) target.Hit(guid, this, AttackCallback);
+            if (attackDelays.ContainsKey(hits[i].collider.gameObject))
+            {
+                if (attackDelays[hits[i].collider.gameObject] > Time.time - _delay) continue;
+            }
+
+            if (hits[i].collider.gameObject.TryGetComponent(out target)) target.Hit(this, AttackCallback);
         }
     }
 

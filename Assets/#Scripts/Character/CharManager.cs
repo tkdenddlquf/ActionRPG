@@ -72,22 +72,14 @@ public class CharManager : HitBase
     // 상속
     public override bool UseEnergy(AnimState _state, bool _check = false)
     {
-        switch (_state)
+        return _state switch
         {
-            case AnimState.Idle:
-                return UseEnergy(-1, _check);
-
-            case AnimState.Attack:
-                return UseEnergy(100, _check);
-
-            case AnimState.Guard:
-                return UseEnergy(1, _check);
-
-            case AnimState.Roll:
-                return UseEnergy(100, _check);
-        }
-
-        return true;
+            AnimState.Idle => UseEnergy(-1, _check),
+            AnimState.Attack => UseEnergy(100, _check),
+            AnimState.Guard => UseEnergy(1, _check),
+            AnimState.Roll => UseEnergy(100, _check),
+            _ => true,
+        };
     }
 
     protected override void LookTargetCallback()

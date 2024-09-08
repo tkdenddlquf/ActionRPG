@@ -5,20 +5,22 @@ public class AnimStateMachine : StateMachineBehaviour
     public AnimState thisState;
 
     private float time;
-    private Transform look;
-    private HitBase hitBase;
+    public Transform look;
+    public HitBase hitBase;
 
     private Vector3 MoveDir => look == hitBase.transform ? Vector3.forward : new(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
     private Quaternion Angle => Quaternion.LookRotation(new Vector3(look.forward.x, 0, look.forward.z));
 
-    public void Init(Transform _look, HitBase _base)
-    {
-        look = _look;
-        hitBase = _base;
-    }
-
     public override void OnStateEnter(Animator _animator, AnimatorStateInfo _stateInfo, int _layerIndex)
     {
+        if (hitBase == null)
+        {
+            _animator.gameObject.TryGetComponent(out hitBase);
+
+            if ((1 << _animator.gameObject.layer) == LayerMask.GetMask("Character")) look = GameManager._instance.cam.transform;
+            else look = _animator.gameObject.transform;
+        }
+
         switch (thisState)
         {
             case AnimState.Attack:

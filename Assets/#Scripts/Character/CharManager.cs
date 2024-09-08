@@ -12,10 +12,6 @@ public class CharManager : HitBase
 
         Init("Enemy");
 
-        AnimStateMachine[] _animBehaviours = Animator.GetBehaviours<AnimStateMachine>();
-
-        foreach (AnimStateMachine _animBehaviour in _animBehaviours) _animBehaviour.Init(GameManager._instance.cam.transform, this);
-
         commonInfo.hp[0].SetBind(HpBind);
         commonInfo.mp[0].SetBind(MpBind);
         commonInfo.energy[0].SetBind(EnergyBind);

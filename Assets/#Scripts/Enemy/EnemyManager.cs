@@ -12,10 +12,6 @@ public class EnemyManager : HitBase
 
         Init("Character");
 
-        AnimStateMachine[] _animBehaviours = Animator.GetBehaviours<AnimStateMachine>();
-
-        foreach (AnimStateMachine _animBehaviour in _animBehaviours) _animBehaviour.Init(transform, this);
-
         commonInfo.hp[0].SetBind(HpBind);
         commonInfo.attackSpeed.SetBind(AttackSpeedBind);
     }

@@ -16,10 +16,10 @@ public abstract class HitBase : MonoBehaviour
     private LayerMask mask;
     private CheckHit target;
     private GameObject lookTarget;
-    private readonly Dictionary<GameObject, float> attackDelays = new();
+    private readonly Dictionary<GameObject, Dictionary<int, AttackInfoValue>> attackable = new();
 
     // 공격확인 및 범위
-    private int hitCount;
+    private int hitsLength;
     private HitBox hitBox;
     private readonly RaycastHit[] hits = new RaycastHit[5];
 
@@ -30,6 +30,7 @@ public abstract class HitBase : MonoBehaviour
     public Animator Animator => animator;
     public AnimStateBase AnimStateBase => animStateBase;
     public Rigidbody Rigidbody => rb;
+    public HitBox HitBox => hitBox;
 
     public GameObject LookTarget
     {
@@ -82,13 +83,16 @@ public abstract class HitBase : MonoBehaviour
         return true;
     }
 
-    protected virtual void AttackCallback(HitBase _hitBase) // 공격 성공
+    protected virtual void AttackCallback(HitBase _hitBase, int _type) // 공격 성공
     {
-        attackDelays[_hitBase.gameObject] = Time.time;
+        if (!attackable.ContainsKey(_hitBase.gameObject)) attackable.Add(_hitBase.gameObject, new());
+        if (!attackable[_hitBase.gameObject].ContainsKey(_type)) attackable[_hitBase.gameObject].Add(_type, new());
+
+        attackable[_hitBase.gameObject][_type].Attack();
 
         if (_hitBase.commonInfo.hp[0].Data == 0) // 대상이 사망한 경우
         {
-            attackDelays.Remove(_hitBase.gameObject);
+            attackable.Remove(_hitBase.gameObject);
 
             if (LookTarget == _hitBase.gameObject) LookTarget = null; // 추적중인 경우
         }
@@ -114,20 +118,20 @@ public abstract class HitBase : MonoBehaviour
         else if (Physics.Raycast(GameManager._instance.cam.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 100, mask)) LookTarget = hit.transform.gameObject;
     }
 
-    public void CheckHit(int _hitBoxNum, float _delay) // 공격 확인
+    public void CheckHitBox(int _attackType, float _delay) // 공격 확인
     {
         if (!attack.activeSelf) return;
 
-        hitCount = Physics.BoxCastNonAlloc(transform.position + transform.TransformDirection(hitBox.pos[_hitBoxNum]), hitBox.size[_hitBoxNum], transform.forward, hits, Quaternion.identity, 0, mask);
+        hitsLength = Physics.BoxCastNonAlloc(transform.position + transform.TransformDirection(hitBox.pos[_attackType]), hitBox.scale[_attackType], transform.forward, hits, Quaternion.identity, 0, mask);
 
-        for (int i = 0; i < hitCount; i++)
+        for (int i = 0; i < hitsLength; i++)
         {
-            if (attackDelays.ContainsKey(hits[i].collider.gameObject))
+            if (attackable.ContainsKey(hits[i].collider.gameObject))
             {
-                if (attackDelays[hits[i].collider.gameObject] > Time.time - _delay) continue;
+                if (!attackable[hits[i].collider.gameObject][_attackType].Attackable(_delay, hitBox.maxHitCount[_attackType])) continue;
             }
 
-            if (hits[i].collider.gameObject.TryGetComponent(out target)) target.Hit(this, AttackCallback);
+            if (hits[i].collider.gameObject.TryGetComponent(out target)) target.Hit(this, _attackType, AttackCallback);
         }
     }
 

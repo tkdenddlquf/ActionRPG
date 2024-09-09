@@ -3,8 +3,10 @@ using System.Collections.Generic;
 
 public class HitBox : MonoBehaviour
 {
+    public List<int> maxHitCount = new() { 1 };
+
     public List<Vector3> pos = new() { new(0, 0, 0) };
-    public List<Vector3> size = new() { new(1, 1, 1) };
+    public List<Vector3> scale = new() { new(1, 1, 1) };
 
 #if UNITY_EDITOR
     private int select = 0;
@@ -15,24 +17,23 @@ public class HitBox : MonoBehaviour
         {
             return select;
         }
-
         set
         {
             if (value < 0) return;
-            if (value > pos.Count) return;
+            if (value > pos.Count - 1) return;
 
             select = value;
         }
     }
 
-    public Vector3 this[GUIState _state]
+    public Vector3 this[GUIMode _state]
     {
         get
         {
             return _state switch
             {
-                GUIState.Move => pos[Select],
-                GUIState.Size => size[Select],
+                GUIMode.Pos => pos[Select],
+                GUIMode.Scale => scale[Select],
                 _ => Vector3.zero
             };
         }
@@ -40,12 +41,12 @@ public class HitBox : MonoBehaviour
         {
             switch (_state)
             {
-                case GUIState.Move:
+                case GUIMode.Pos:
                     pos[Select] = value;
                     break;
 
-                case GUIState.Size:
-                    size[Select] = value;
+                case GUIMode.Scale:
+                    scale[Select] = value;
                     break;
             }
         }

@@ -5,8 +5,7 @@ using UnityEngine;
 [CustomEditor(typeof(HitBox))]
 public class HitBoxGUI : Editor
 {
-    private GUIState state;
-
+    private GUIMode mode;
     private HitBox component;
 
     private void OnEnable()
@@ -16,42 +15,70 @@ public class HitBoxGUI : Editor
 
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
+        component.Select = EditorGUILayout.IntSlider("Select", component.Select, 0, component.pos.Count);
+        component[GUIMode.Pos] = EditorGUILayout.Vector3Field("Pos", component[GUIMode.Pos]);
+        component[GUIMode.Scale] = EditorGUILayout.Vector3Field("Scale", component[GUIMode.Scale]);
 
-        if (GUILayout.Button("Move HitBox"))
+        GUILayout.Space(5);
+
+        GUILayout.BeginHorizontal();
+
+        if (GUILayout.Button("Pos"))
         {
-            if (state == GUIState.Move) state = GUIState.None;
-            else state = GUIState.Move;
+            if (mode == GUIMode.Pos) mode = GUIMode.None;
+            else mode = GUIMode.Pos;
         }
 
-        if (GUILayout.Button("Size HitBox"))
+        if (GUILayout.Button("Scale"))
         {
-            if (state == GUIState.Size) state = GUIState.None;
-            else state = GUIState.Size;
+            if (mode == GUIMode.Scale) mode = GUIMode.None;
+            else mode = GUIMode.Scale;
         }
 
-        if (GUILayout.Button("Next HitBox")) component.Select++;
+        GUILayout.EndHorizontal();
 
-        if (GUILayout.Button("Prev HitBox")) component.Select--;
+        GUILayout.Space(5);
+
+        GUILayout.BeginHorizontal();
+
+        if (GUILayout.Button("Add"))
+        {
+            component.scale.Add(new(1, 1, 1));
+            component.pos.Add(new(0, 0, 0));
+
+            component.Select = component.pos.Count - 1;
+        }
+
+        if (GUILayout.Button("Remove"))
+        {
+            if (component.Select == component.pos.Count - 1) component.Select--;
+
+            component.scale.RemoveAt(component.Select + 1);
+            component.pos.RemoveAt(component.Select + 1);
+        }
+
+        GUILayout.EndHorizontal();
+
+        if (GUI.changed) EditorUtility.SetDirty(target);
     }
 
     private void OnSceneGUI()
     {
-        switch (state)
+        switch (mode)
         {
-            case GUIState.None:
+            case GUIMode.None:
                 break;
 
-            case GUIState.Move:
+            case GUIMode.Pos:
                 Tools.current = Tool.None;
 
-                component[state] = Handles.PositionHandle(component.transform.position + component[GUIState.Move], component.transform.rotation) - component.transform.position;
+                component[mode] = Handles.PositionHandle(component.transform.position + component[GUIMode.Pos], component.transform.rotation) - component.transform.position;
                 break;
 
-            case GUIState.Size:
+            case GUIMode.Scale:
                 Tools.current = Tool.None;
 
-                component[state] = Handles.ScaleHandle(component[state], component.transform.position + component[GUIState.Move], component.transform.rotation);
+                component[mode] = Handles.ScaleHandle(component[mode], component.transform.position + component[GUIMode.Pos], component.transform.rotation);
                 break;
         }
     }
@@ -62,14 +89,14 @@ public class HitBoxGUI : Editor
         Gizmos.matrix = _component.transform.localToWorldMatrix;
         Gizmos.color = Color.green;
 
-        Gizmos.DrawWireCube(_component[GUIState.Move], _component[GUIState.Size] * 2);
+        Gizmos.DrawWireCube(_component[GUIMode.Pos], _component[GUIMode.Scale] * 2);
     }
 }
 
-public enum GUIState
+public enum GUIMode
 {
     None,
-    Move,
-    Size
+    Pos,
+    Scale
 }
 #endif

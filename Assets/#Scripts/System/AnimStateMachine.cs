@@ -66,7 +66,7 @@ public class AnimStateMachine : StateMachineBehaviour
                 break;
 
             case AnimState.Attack:
-                hitBase.CheckHit(0, 1f);
+                hitBase.CheckHitBox(0, 1f);
 
                 _animator.SetBool("Hit", false);
                 break;

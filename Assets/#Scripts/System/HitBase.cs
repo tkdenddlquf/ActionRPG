@@ -128,7 +128,10 @@ public abstract class HitBase : MonoBehaviour
         {
             if (attackable.ContainsKey(hits[i].collider.gameObject))
             {
-                if (!attackable[hits[i].collider.gameObject][_attackType].Attackable(_delay, hitBox.maxHitCount[_attackType])) continue;
+                if (attackable[hits[i].collider.gameObject].ContainsKey(_attackType))
+                {
+                    if (!attackable[hits[i].collider.gameObject][_attackType].Attackable(_delay, hitBox.maxHitCount[_attackType])) continue;
+                }
             }
 
             if (hits[i].collider.gameObject.TryGetComponent(out target)) target.Hit(this, _attackType, AttackCallback);

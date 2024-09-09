@@ -13,7 +13,12 @@ public class AttackInfoValue
 
     public bool Attackable(float _delay, int _max)
     {
-        if (time < Time.time - _delay) return true;
+        if (time < Time.time - _delay)
+        {
+            count = 0;
+
+            return true;
+        }
         else if (count < _max) return true;
 
         return false;

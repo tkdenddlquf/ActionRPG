@@ -15,6 +15,13 @@ public class EnemyStateBase
 
     public void UpdateState()
     {
+        if (enemy.commonInfo.hp[0].Data == 0) return;
+
+        FallowTarget();
+    }
+
+    private void FallowTarget()
+    {
         if (enemy.LookTarget == null) // 추적할 대상이 없는 경우 원래 위치로 이동
         {
             enemy.AnimStateBase.State = AnimState.Idle;

@@ -20,7 +20,7 @@ public abstract class HitBase : MonoBehaviour
 
     // 공격확인 및 범위
     private int hitCount;
-    private Vector3 hitBoxSize = new(0.5f, 0.75f, 0.7f);
+    private HitBox hitBox;
     private readonly RaycastHit[] hits = new RaycastHit[5];
 
     // 애니메이션 및 상태
@@ -47,6 +47,8 @@ public abstract class HitBase : MonoBehaviour
 
     protected void Init(params string[] _layers)
     {
+        TryGetComponent(out hitBox);
+
         TryGetComponent(out rb);
         TryGetComponent(out hit);
         hit.hitAction = HitAction;
@@ -112,11 +114,11 @@ public abstract class HitBase : MonoBehaviour
         else if (Physics.Raycast(GameManager._instance.cam.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 100, mask)) LookTarget = hit.transform.gameObject;
     }
 
-    public void CheckHit(float _delay) // 공격 확인
+    public void CheckHit(int _hitBoxNum, float _delay) // 공격 확인
     {
         if (!attack.activeSelf) return;
 
-        hitCount = Physics.BoxCastNonAlloc(attack.transform.position, hitBoxSize, transform.forward, hits, Quaternion.identity, 0, mask);
+        hitCount = Physics.BoxCastNonAlloc(transform.position + transform.TransformDirection(hitBox.pos[_hitBoxNum]), hitBox.size[_hitBoxNum], transform.forward, hits, Quaternion.identity, 0, mask);
 
         for (int i = 0; i < hitCount; i++)
         {

@@ -22,7 +22,7 @@ public class LerpSlider
 
     public void Update()
     {
-        slider.value = Mathf.Lerp(slider.value, data, 0.1f);
+        slider.value = Mathf.Lerp(slider.value, data, 0.2f);
 
         if (slider.value == data) action.Remove(Update);
     }

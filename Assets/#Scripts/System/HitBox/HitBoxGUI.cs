@@ -47,6 +47,10 @@ public class HitBoxGUI : Editor
             component.pos.Add(new(0, 0, 0));
 
             component.Select = component.pos.Count - 1;
+
+            EditorUtility.SetDirty(target);
+
+            Undo.RecordObject(component, "Add");
         }
 
         if (GUILayout.Button("Remove"))
@@ -55,11 +59,20 @@ public class HitBoxGUI : Editor
 
             component.scale.RemoveAt(component.Select + 1);
             component.pos.RemoveAt(component.Select + 1);
+
+            EditorUtility.SetDirty(target);
+
+            Undo.RecordObject(component, "Remove");
         }
 
         GUILayout.EndHorizontal();
 
-        if (GUI.changed) EditorUtility.SetDirty(target);
+        if (GUI.changed)
+        {
+            EditorUtility.SetDirty(target);
+
+            Undo.RecordObject(target, "Changed");
+        }
     }
 
     private void OnSceneGUI()

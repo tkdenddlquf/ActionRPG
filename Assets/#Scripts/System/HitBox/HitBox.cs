@@ -15,6 +15,9 @@ public class HitBox : MonoBehaviour
     {
         get
         {
+            if (select < 0) select = 0;
+            if (select > pos.Count - 1) select = pos.Count - 1;
+
             return select;
         }
         set

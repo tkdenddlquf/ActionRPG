@@ -16,6 +16,8 @@ public class CharManager : HitBase
         commonInfo.mp[0].SetBind(MpBind);
         commonInfo.energy[0].SetBind(EnergyBind);
         commonInfo.attackSpeed.SetBind(AttackSpeedBind);
+
+        specificInfo.potion[0].SetBind(PotionBind);
     }
 
     private void Update()
@@ -23,7 +25,7 @@ public class CharManager : HitBase
         inputBase.CheckInput();
     }
 
-    // 데이터 바인드
+    // 일반 데이터 바인드
     private void HpBind(ref int _current, int _change)
     {
         if (_change < 0) _change = 0;
@@ -33,7 +35,7 @@ public class CharManager : HitBase
 
         _current = _change;
 
-        GameManager._instance.charPanel.hp.SetData(sliderAction, (float)_current / commonInfo.hp[1].Data);
+        GameManager._instance.charPanel.hp.SetData(LerpAction, (float)_current / commonInfo.hp[1].Data);
 
         if (_current == 0) Die();
     }
@@ -45,7 +47,7 @@ public class CharManager : HitBase
 
         _current = _change;
 
-        GameManager._instance.charPanel.mp.SetData(sliderAction, (float)_current / commonInfo.mp[1].Data);
+        GameManager._instance.charPanel.mp.SetData(LerpAction, (float)_current / commonInfo.mp[1].Data);
     }
 
     private void EnergyBind(ref int _current, int _change)
@@ -55,7 +57,7 @@ public class CharManager : HitBase
 
         _current = _change;
 
-        GameManager._instance.charPanel.energy.SetData(sliderAction, (float)_current / commonInfo.energy[1].Data);
+        GameManager._instance.charPanel.energy.SetData(LerpAction, (float)_current / commonInfo.energy[1].Data);
     }
 
     private void AttackSpeedBind(ref float _current, float _change)
@@ -63,6 +65,17 @@ public class CharManager : HitBase
         _current = _change;
 
         Animator.SetFloat("AttackSpeed", _current);
+    }
+
+    // 특별 데이터 바인드
+    private void PotionBind(ref int _current, int _change)
+    {
+        if (_change < 0) _change = 0;
+        else if (_change > specificInfo.potion[1].Data) _change = specificInfo.potion[1].Data;
+
+        _current = _change;
+
+        GameManager._instance.charPanel.potion.SetData(LerpAction, (float)_current / specificInfo.potion[1].Data);
     }
 
     // 상속
@@ -82,8 +95,8 @@ public class CharManager : HitBase
     {
         if (LookTarget == null)
         {
-            GameManager._instance.cineOrbit.HorizontalAxis.Value = GameManager._instance.cam.transform.eulerAngles.y;
-            GameManager._instance.cineOrbit.VerticalAxis.Value = GameManager._instance.cam.transform.eulerAngles.x + 17.5f;
+            GameManager._instance.cineOrbit.HorizontalAxis.Value = GameManager._instance.Cam.transform.eulerAngles.y;
+            GameManager._instance.cineOrbit.VerticalAxis.Value = GameManager._instance.Cam.transform.eulerAngles.x + 17.5f;
 
             GameManager._instance.cineCam.Priority = -1;
         }

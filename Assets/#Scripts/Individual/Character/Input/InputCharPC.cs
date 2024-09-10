@@ -11,7 +11,19 @@ public class InputCharPC : InputBase
 
     public override void CheckInput()
     {
-        if (Input.GetKeyDown(KeyCode.Q)) character.SetTarget();
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (character.LookTarget == null)
+            {
+                if (Physics.Raycast(GameManager._instance.Cam.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 200, character.Mask)) character.LookTarget = hit.transform.gameObject;
+            }
+            else character.LookTarget = null;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (character.specificInfo.potion[1].Data >= 100) character.specificInfo.potion[0].Data -= 100;
+        }
 
         CheckState();
     }
@@ -29,10 +41,10 @@ public class InputCharPC : InputBase
                 case AnimState.Idle:
                     if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0) // 이동
                     {
-                        if (Input.GetKey(KeyCode.LeftAlt)) character.Animator.SetFloat("MoveSpeed", 0.5f, 1f, 0.1f);
-                        else character.Animator.SetFloat("MoveSpeed", 1, 1f, 0.1f);
+                        if (Input.GetKey(KeyCode.LeftAlt)) character.Animator.SetFloat("MoveSpeed", 1.75f, 1f, 0.1f);
+                        else character.Animator.SetFloat("MoveSpeed", 1 + character.commonInfo.moveSpeed.Data, 1f, 0.1f);
                     }
-                    else character.Animator.SetFloat("MoveSpeed", 0, 1f, 0.1f);
+                    else character.Animator.SetFloat("MoveSpeed", 1, 1f, 0.1f);
                     break;
 
                 case AnimState.Attack:

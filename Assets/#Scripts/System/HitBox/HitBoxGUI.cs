@@ -48,9 +48,7 @@ public class HitBoxGUI : Editor
 
             component.Select = component.pos.Count - 1;
 
-            EditorUtility.SetDirty(target);
-
-            Undo.RecordObject(component, "Add");
+            Record("Add");
         }
 
         if (GUILayout.Button("Remove"))
@@ -60,19 +58,12 @@ public class HitBoxGUI : Editor
             component.scale.RemoveAt(component.Select + 1);
             component.pos.RemoveAt(component.Select + 1);
 
-            EditorUtility.SetDirty(target);
-
-            Undo.RecordObject(component, "Remove");
+            Record("Remove");
         }
 
         GUILayout.EndHorizontal();
 
-        if (GUI.changed)
-        {
-            EditorUtility.SetDirty(target);
-
-            Undo.RecordObject(target, "Changed");
-        }
+        if (GUI.changed) Record("Chaged");
     }
 
     private void OnSceneGUI()
@@ -94,6 +85,13 @@ public class HitBoxGUI : Editor
                 component[mode] = Handles.ScaleHandle(component[mode], component.transform.position + component[GUIMode.Pos], component.transform.rotation);
                 break;
         }
+    }
+
+    private void Record(string _title)
+    {
+        EditorUtility.SetDirty(target);
+
+        Undo.RecordObject(target, _title);
     }
 
     [DrawGizmo(GizmoType.InSelectionHierarchy)]

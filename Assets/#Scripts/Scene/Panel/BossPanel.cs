@@ -10,10 +10,7 @@ public class BossPanel : MonoBehaviour
 
     public EnemyManager Target
     {
-        get
-        {
-            return target;
-        }
+        get => target;
         set
         {
             if (target == value) return;
@@ -27,7 +24,7 @@ public class BossPanel : MonoBehaviour
 
     public void SetHp(float _value)
     {
-        hp.SetData(target.sliderAction, _value);
+        hp.SetData(target.LerpAction, _value);
 
         if (_value == 0) Target = null;
     }

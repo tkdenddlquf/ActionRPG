@@ -26,12 +26,12 @@ public class EnemyStateBase
         {
             enemy.AnimStateBase.State = AnimState.Idle;
 
-            if (Vector3.Distance(enemy.transform.position, initPos) < 1) enemy.Animator.SetFloat("MoveSpeed", 0, 1f, 0.1f);
+            if (Vector3.Distance(enemy.transform.position, initPos) < 1) enemy.Animator.SetFloat("MoveSpeed", 1, 1f, 0.1f);
             else
             {
                 enemy.transform.LookAt(initPos); // 기존 위치로 방향 설정
 
-                enemy.Animator.SetFloat("MoveSpeed", 0.5f, 1f, 0.1f);
+                enemy.Animator.SetFloat("MoveSpeed", 1 + enemy.commonInfo.moveSpeed.Data, 1f, 0.1f);
             }
 
             return;
@@ -44,9 +44,9 @@ public class EnemyStateBase
             enemy.transform.LookAt(initPos); // 기존 위치로 방향 설정
 
             enemy.AnimStateBase.State = AnimState.Idle;
-            enemy.Animator.SetFloat("MoveSpeed", 0.5f, 1f, 0.1f);
+            enemy.Animator.SetFloat("MoveSpeed", 1 + enemy.commonInfo.moveSpeed.Data, 1f, 0.1f);
 
-            enemy.SetTarget(); // 추적 해제
+            enemy.LookTarget = null; // 추적 해제
 
             return;
         }
@@ -65,7 +65,7 @@ public class EnemyStateBase
         else
         {
             enemy.AnimStateBase.StateRecord = AnimState.Idle;
-            enemy.Animator.SetFloat("MoveSpeed", 0.5f, 1f, 0.1f);
+            enemy.Animator.SetFloat("MoveSpeed", 1 + enemy.commonInfo.moveSpeed.Data, 1f, 0.1f);
         }
 
         enemy.AnimStateBase.State = enemy.AnimStateBase.StateRecord;

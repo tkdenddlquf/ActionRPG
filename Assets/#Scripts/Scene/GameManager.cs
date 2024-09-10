@@ -7,8 +7,9 @@ public class GameManager : MonoBehaviour
     public static GameManager _instance;
     private void Awake() { _instance = this; }
 
+    public Camera Cam { get; private set; }
+
     public CharManager character;
-    public Camera cam;
     public CinemachineOrbitalFollow cineOrbit;
     public CinemachineCamera cineCam;
 
@@ -20,7 +21,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        cam = Camera.main;
+        Cam = Camera.main;
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;

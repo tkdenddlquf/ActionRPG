@@ -10,21 +10,18 @@ public class HitBox : MonoBehaviour
 
 #if UNITY_EDITOR
     private int select = 0;
-
     public int Select
     {
         get
         {
             if (select < 0) select = 0;
             if (select > pos.Count - 1) select = pos.Count - 1;
-
             return select;
         }
         set
         {
             if (value < 0) return;
             if (value > pos.Count - 1) return;
-
             select = value;
         }
     }

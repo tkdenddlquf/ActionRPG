@@ -8,9 +8,9 @@ public class LerpSlider
     public Slider slider;
 
     private float data;
-    private LerpSliderAction action;
+    private LerpUIAction action;
 
-    public void SetData(LerpSliderAction _action, float _value)
+    public void SetData(LerpUIAction _action, float _value)
     {
         action = _action;
         data = _value;
@@ -28,7 +28,7 @@ public class LerpSlider
     }
 }
 
-public class LerpSliderAction
+public class LerpUIAction
 {
     public Action actions;
 

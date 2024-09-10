@@ -10,10 +10,7 @@ public class BindData<T>
 
     public T Data
     {
-        get
-        {
-            return data;
-        }
+        get => data;
         set
         {
             if (bind == null) data = value;

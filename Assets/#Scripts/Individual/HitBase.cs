@@ -5,40 +5,28 @@ public abstract class HitBase : MonoBehaviour
 {
     // STATUS
     public CommonInfo commonInfo;
-    public LerpSliderAction sliderAction = new();
-
     public GameObject attack;
 
     private CheckHit hit;
-    private Rigidbody rb;
-
-    // 대상
-    private LayerMask mask;
-    private CheckHit target;
     private GameObject lookTarget;
+
+    // 공격
+    private int hitsLength;
+    private CheckHit hitTarget;
+    private readonly Collider[] hitColliders = new Collider[5];
     private readonly Dictionary<GameObject, Dictionary<int, AttackInfoValue>> attackable = new();
 
-    // 공격확인 및 범위
-    private int hitsLength;
-    private HitBox hitBox;
-    private readonly Collider[] hits = new Collider[5];
-
-    // 애니메이션 및 상태
-    private Animator animator;
-    private AnimStateBase animStateBase;
-
-    public Animator Animator => animator;
-    public AnimStateBase AnimStateBase => animStateBase;
-    public Rigidbody Rigidbody => rb;
-    public HitBox HitBox => hitBox;
-
+    // 프로퍼티
+    public HitBox HitBox { get; private set; }
+    public LayerMask Mask { get; private set; }
+    public Rigidbody Rigidbody { get; private set; }
+    public Animator Animator { get; private set; }
+    public AnimStateBase AnimStateBase { get; private set; }
+    public LerpUIAction LerpAction { get; private set; } = new();
     public GameObject LookTarget
     {
-        get
-        {
-            return lookTarget;
-        }
-        protected set
+        get => lookTarget;
+        set
         {
             lookTarget = value;
 
@@ -48,21 +36,21 @@ public abstract class HitBase : MonoBehaviour
 
     protected void Init(params string[] _layers)
     {
-        TryGetComponent(out hitBox);
+        HitBox = GetComponent<HitBox>();
+        Rigidbody = GetComponent<Rigidbody>();
 
-        TryGetComponent(out rb);
-        TryGetComponent(out hit);
+        hit = GetComponent<CheckHit>();
         hit.hitAction = HitAction;
 
-        TryGetComponent(out animator);
-        animStateBase = new(animator);
+        Animator = GetComponent<Animator>();
+        AnimStateBase = new(Animator);
 
-        mask = LayerMask.GetMask(_layers);
+        Mask = LayerMask.GetMask(_layers);
     }
 
     private void FixedUpdate()
     {
-        sliderAction.actions?.Invoke();
+        LerpAction.actions?.Invoke();
     }
 
     // 상속
@@ -112,26 +100,18 @@ public abstract class HitBase : MonoBehaviour
     }
 
     // 기본
-    public void SetTarget() // 대상 변경
-    {
-        if (LookTarget != null) LookTarget = null;
-        else if (Physics.Raycast(GameManager._instance.cam.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 100, mask)) LookTarget = hit.transform.gameObject;
-    }
-
     public void CheckHitBox(int _attackType, float _delay) // 공격 확인
     {
-        if (!attack.activeSelf) return;
-
-        hitsLength = Physics.OverlapBoxNonAlloc(transform.position + transform.TransformDirection(hitBox.pos[_attackType]), hitBox.scale[_attackType], hits, Quaternion.identity, mask);
+        hitsLength = Physics.OverlapBoxNonAlloc(transform.position + transform.TransformDirection(HitBox.pos[_attackType]), HitBox.scale[_attackType], hitColliders, Quaternion.identity, Mask);
 
         for (int i = 0; i < hitsLength; i++)
         {
-            if (!attackable.ContainsKey(hits[i].gameObject)) attackable[hits[i].gameObject] = new();
-            if (!attackable[hits[i].gameObject].ContainsKey(_attackType)) attackable[hits[i].gameObject][_attackType] = new();
+            if (!attackable.ContainsKey(hitColliders[i].gameObject)) attackable[hitColliders[i].gameObject] = new();
+            if (!attackable[hitColliders[i].gameObject].ContainsKey(_attackType)) attackable[hitColliders[i].gameObject][_attackType] = new();
 
-            if (!attackable[hits[i].gameObject][_attackType].Attackable(_delay, hitBox.maxHitCount[_attackType])) continue;
+            if (!attackable[hitColliders[i].gameObject][_attackType].Attackable(_delay, HitBox.maxHitCount[_attackType])) continue;
 
-            if (hits[i].gameObject.TryGetComponent(out target)) target.Hit(this, _attackType, AttackCallback);
+            if (hitColliders[i].gameObject.TryGetComponent(out hitTarget)) hitTarget.Hit(this, _attackType, AttackCallback);
         }
     }
 

@@ -17,7 +17,7 @@ public class AnimStateMachine : StateMachineBehaviour
         {
             _animator.gameObject.TryGetComponent(out hitBase);
 
-            if ((1 << _animator.gameObject.layer) == LayerMask.GetMask("Character")) look = GameManager._instance.cam.transform;
+            if ((1 << _animator.gameObject.layer) == LayerMask.GetMask("Character")) look = GameManager._instance.Cam.transform;
             else look = _animator.gameObject.transform;
         }
 
@@ -61,12 +61,12 @@ public class AnimStateMachine : StateMachineBehaviour
                 if (MoveDir != Vector3.zero)
                 {
                     hitBase.transform.rotation = Quaternion.Slerp(hitBase.transform.rotation, Quaternion.LookRotation(MoveDir) * Angle, 0.5f);
-                    hitBase.Rigidbody.AddRelativeForce(100 * _animator.GetFloat("MoveSpeed") * hitBase.commonInfo.moveSpeed.Data * Vector3.forward);
+                    hitBase.Rigidbody.AddRelativeForce(100 * (_animator.GetFloat("MoveSpeed") - 1) * Vector3.forward);
                 }
                 break;
 
             case AnimState.Attack:
-                hitBase.CheckHitBox(0, 1f);
+                if (hitBase.attack.activeSelf) hitBase.CheckHitBox(0, 1f);
 
                 _animator.SetBool("Hit", false);
                 break;

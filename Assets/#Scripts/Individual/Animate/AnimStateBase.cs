@@ -6,7 +6,6 @@ public class AnimStateBase
     public bool guard;
 
     private AnimState state;
-    private AnimState stateRecord;
 
     private readonly Animator animator;
 
@@ -17,10 +16,7 @@ public class AnimStateBase
 
     public AnimState State
     {
-        get
-        {
-            return state;
-        }
+        get => state;
         set
         {
             if (state == value) return;
@@ -31,17 +27,7 @@ public class AnimStateBase
         }
     }
 
-    public AnimState StateRecord
-    {
-        get
-        {
-            return stateRecord;
-        }
-        set
-        {
-            stateRecord = value;
-        }
-    }
+    public AnimState StateRecord { get; set; }
 }
 
 public enum AnimState
@@ -50,5 +36,6 @@ public enum AnimState
     Attack,
     Guard,
     Roll,
-    Hit
+    Hit,
+    UsePotion
 }

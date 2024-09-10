@@ -21,7 +21,7 @@ public abstract class HitBase : MonoBehaviour
     // 공격확인 및 범위
     private int hitsLength;
     private HitBox hitBox;
-    private readonly RaycastHit[] hits = new RaycastHit[5];
+    private readonly Collider[] hits = new Collider[5];
 
     // 애니메이션 및 상태
     private Animator animator;
@@ -85,18 +85,18 @@ public abstract class HitBase : MonoBehaviour
 
     protected virtual void AttackCallback(HitBase _hitBase, int _type) // 공격 성공
     {
-        if (!attackable.ContainsKey(_hitBase.gameObject)) attackable.Add(_hitBase.gameObject, new());
-        if (!attackable[_hitBase.gameObject].ContainsKey(_type)) attackable[_hitBase.gameObject].Add(_type, new());
-
-        attackable[_hitBase.gameObject][_type].Attack();
-
         if (_hitBase.commonInfo.hp[0].Data == 0) // 대상이 사망한 경우
         {
             attackable.Remove(_hitBase.gameObject);
 
             if (LookTarget == _hitBase.gameObject) LookTarget = null; // 추적중인 경우
         }
-        else if (LookTarget == null) LookTarget = _hitBase.gameObject;
+        else
+        {
+            attackable[_hitBase.gameObject][_type].Attack();
+
+            if (LookTarget == null) LookTarget = _hitBase.gameObject;
+        }
     }
 
     protected virtual void Die() // 사망
@@ -122,19 +122,16 @@ public abstract class HitBase : MonoBehaviour
     {
         if (!attack.activeSelf) return;
 
-        hitsLength = Physics.BoxCastNonAlloc(transform.position + transform.TransformDirection(hitBox.pos[_attackType]), hitBox.scale[_attackType], transform.forward, hits, Quaternion.identity, 0, mask);
+        hitsLength = Physics.OverlapBoxNonAlloc(transform.position + transform.TransformDirection(hitBox.pos[_attackType]), hitBox.scale[_attackType], hits, Quaternion.identity, mask);
 
         for (int i = 0; i < hitsLength; i++)
         {
-            if (attackable.ContainsKey(hits[i].collider.gameObject))
-            {
-                if (attackable[hits[i].collider.gameObject].ContainsKey(_attackType))
-                {
-                    if (!attackable[hits[i].collider.gameObject][_attackType].Attackable(_delay, hitBox.maxHitCount[_attackType])) continue;
-                }
-            }
+            if (!attackable.ContainsKey(hits[i].gameObject)) attackable[hits[i].gameObject] = new();
+            if (!attackable[hits[i].gameObject].ContainsKey(_attackType)) attackable[hits[i].gameObject][_attackType] = new();
 
-            if (hits[i].collider.gameObject.TryGetComponent(out target)) target.Hit(this, _attackType, AttackCallback);
+            if (!attackable[hits[i].gameObject][_attackType].Attackable(_delay, hitBox.maxHitCount[_attackType])) continue;
+
+            if (hits[i].gameObject.TryGetComponent(out target)) target.Hit(this, _attackType, AttackCallback);
         }
     }
 

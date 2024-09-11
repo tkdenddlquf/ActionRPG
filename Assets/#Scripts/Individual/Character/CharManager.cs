@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CharManager : HitBase
+public class CharManager : IndividualBase
 {
     public SpecificInfo specificInfo;
 

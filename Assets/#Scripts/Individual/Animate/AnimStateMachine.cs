@@ -6,7 +6,7 @@ public class AnimStateMachine : StateMachineBehaviour
 
     private float time;
     private Transform look;
-    private HitBase hitBase;
+    private IndividualBase hitBase;
 
     private Vector3 MoveDir => look == hitBase.transform ? Vector3.forward : new(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
     private Quaternion Angle => Quaternion.LookRotation(new Vector3(look.forward.x, 0, look.forward.z));
@@ -66,7 +66,7 @@ public class AnimStateMachine : StateMachineBehaviour
                 break;
 
             case AnimState.Attack:
-                if (hitBase.attack.activeSelf) hitBase.CheckHitBox(0, 1f);
+                if (hitBase.attack.activeSelf) hitBase.Collider.CheckHit(0, hitBase.Mask);
 
                 _animator.SetBool("Hit", false);
                 break;

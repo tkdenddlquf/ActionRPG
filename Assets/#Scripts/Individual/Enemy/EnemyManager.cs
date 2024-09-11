@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyManager : HitBase
+public class EnemyManager : IndividualBase
 {
     public bool isBoss = false;
 

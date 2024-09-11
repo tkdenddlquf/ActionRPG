@@ -5314,7 +5314,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6833278296318912942}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e425e6419f35ea64da71e96f5a4386f4, type: 3}
+  m_Script: {fileID: 11500000, guid: 92cf3de5423c088458f2239fff4b0ef5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &7864074115514264623
@@ -5383,12 +5383,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6833278296318912942}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc81c5fea0930d241b0ec46c2c5c1003, type: 3}
+  m_Script: {fileID: 11500000, guid: 766379d900d0e1945ad7b64db07e979f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHitCount: 01000000
+  maxCount: 01000000
   pos:
-  - {x: 0, y: 1, z: 0.7}
+  - {x: 0, y: 1, z: 1}
   scale:
   - {x: 0.5, y: 0.75, z: 0.7}
 --- !u!1 &7958990038154525222

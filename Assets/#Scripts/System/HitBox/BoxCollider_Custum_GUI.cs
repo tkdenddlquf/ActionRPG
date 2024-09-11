@@ -2,15 +2,15 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(HitBox))]
-public class HitBoxGUI : Editor
+[CustomEditor(typeof(BoxCollider_Custum))]
+public class BoxCollider_Custum_GUI : Editor
 {
     private GUIMode mode;
-    private HitBox component;
+    private BoxCollider_Custum component;
 
     private void OnEnable()
     {
-        component = target as HitBox;
+        component = target as BoxCollider_Custum;
     }
 
     public override void OnInspectorGUI()
@@ -95,7 +95,7 @@ public class HitBoxGUI : Editor
     }
 
     [DrawGizmo(GizmoType.InSelectionHierarchy)]
-    private static void DrawHitBox(HitBox _component, GizmoType _gizmoType)
+    private static void DrawHitBox(BoxCollider_Custum _component, GizmoType _gizmoType)
     {
         Gizmos.matrix = _component.transform.localToWorldMatrix;
         Gizmos.color = Color.green;

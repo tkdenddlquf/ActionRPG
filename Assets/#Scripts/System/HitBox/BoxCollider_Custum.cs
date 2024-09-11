@@ -1,15 +1,30 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class HitBox : MonoBehaviour
+public class BoxCollider_Custum : MonoBehaviour
 {
-    public List<int> maxHitCount = new() { 1 };
+    public List<int> maxCount = new() { 1 };
 
     public List<Vector3> pos = new() { new(0, 0, 0) };
     public List<Vector3> scale = new() { new(1, 1, 1) };
 
+    public Callback callback;
+
+    private int length;
+    private readonly Collider[] colliders = new Collider[5];
+
+    public delegate void Callback(BoxCollider_CustomInfo _info);
+
+    public void CheckHit(int _index, LayerMask _mask) // 공격 확인
+    {
+        length = Physics.OverlapBoxNonAlloc(transform.position + transform.TransformDirection(pos[_index]), scale[_index], colliders, Quaternion.identity, _mask);
+
+        for (int i = 0; i < length; i++) callback(new(colliders[i].gameObject, _index, maxCount[_index]));
+    }
+
 #if UNITY_EDITOR
     private int select = 0;
+
     public int Select
     {
         get
@@ -52,4 +67,19 @@ public class HitBox : MonoBehaviour
         }
     }
 #endif
+}
+
+public struct BoxCollider_CustomInfo
+{
+    public GameObject target;
+
+    public int index;
+    public int maxCount;
+
+    public BoxCollider_CustomInfo(GameObject _target, int _index, int _maxCount)
+    {
+        target = _target;
+        index = _index;
+        maxCount = _maxCount;
+    }
 }

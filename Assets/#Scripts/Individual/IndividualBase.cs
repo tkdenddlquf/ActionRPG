@@ -1,23 +1,21 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public abstract class HitBase : MonoBehaviour
+public abstract class IndividualBase : MonoBehaviour
 {
     // STATUS
     public CommonInfo commonInfo;
     public GameObject attack;
 
-    private CheckHit hit;
+    private HitableObject hitThis;
     private GameObject lookTarget;
 
     // 공격
-    private int hitsLength;
-    private CheckHit hitTarget;
-    private readonly Collider[] hitColliders = new Collider[5];
+    private HitableObject hitTarget;
     private readonly Dictionary<GameObject, Dictionary<int, AttackInfoValue>> attackable = new();
 
     // 프로퍼티
-    public HitBox HitBox { get; private set; }
+    public BoxCollider_Custum Collider { get; private set; }
     public LayerMask Mask { get; private set; }
     public Rigidbody Rigidbody { get; private set; }
     public Animator Animator { get; private set; }
@@ -36,11 +34,13 @@ public abstract class HitBase : MonoBehaviour
 
     protected void Init(params string[] _layers)
     {
-        HitBox = GetComponent<HitBox>();
+        Collider = GetComponent<BoxCollider_Custum>();
+        Collider.callback = HitBoxCallback;
+
         Rigidbody = GetComponent<Rigidbody>();
 
-        hit = GetComponent<CheckHit>();
-        hit.hitAction = HitAction;
+        hitThis = GetComponent<HitableObject>();
+        hitThis.check = HitAction;
 
         Animator = GetComponent<Animator>();
         AnimStateBase = new(Animator);
@@ -59,7 +59,7 @@ public abstract class HitBase : MonoBehaviour
         return true;
     }
 
-    protected virtual bool HitAction(HitBase _hitBase) // 피격
+    protected virtual bool HitAction(IndividualBase _hitBase) // 피격
     {
         if (AnimStateBase.roll) return false; // 구르는 중인 경우 회피
 
@@ -71,7 +71,7 @@ public abstract class HitBase : MonoBehaviour
         return true;
     }
 
-    protected virtual void AttackCallback(HitBase _hitBase, int _type) // 공격 성공
+    protected virtual void AttackCallback(IndividualBase _hitBase, int _type) // 공격 성공
     {
         if (_hitBase.commonInfo.hp[0].Data == 0) // 대상이 사망한 경우
         {
@@ -99,22 +99,22 @@ public abstract class HitBase : MonoBehaviour
 
     }
 
-    // 기본
-    public void CheckHitBox(int _attackType, float _delay) // 공격 확인
+    protected virtual void HitBoxCallback(BoxCollider_CustomInfo _info)
     {
-        hitsLength = Physics.OverlapBoxNonAlloc(transform.position + transform.TransformDirection(HitBox.pos[_attackType]), HitBox.scale[_attackType], hitColliders, Quaternion.identity, Mask);
+        if (!attackable.ContainsKey(_info.target)) attackable[_info.target] = new();
+        if (!attackable[_info.target].ContainsKey(_info.index)) attackable[_info.target][_info.index] = new();
 
-        for (int i = 0; i < hitsLength; i++)
-        {
-            if (!attackable.ContainsKey(hitColliders[i].gameObject)) attackable[hitColliders[i].gameObject] = new();
-            if (!attackable[hitColliders[i].gameObject].ContainsKey(_attackType)) attackable[hitColliders[i].gameObject][_attackType] = new();
+        if (!attackable[_info.target][_info.index].Attackable(GetDelay(_info.index), Collider.maxCount[_info.index])) return;
 
-            if (!attackable[hitColliders[i].gameObject][_attackType].Attackable(_delay, HitBox.maxHitCount[_attackType])) continue;
-
-            if (hitColliders[i].gameObject.TryGetComponent(out hitTarget)) hitTarget.Hit(this, _attackType, AttackCallback);
-        }
+        if (_info.target.TryGetComponent(out hitTarget)) hitTarget.Hit(this, _info.index, AttackCallback);
     }
 
+    protected virtual float GetDelay(int _type)
+    {
+        return 1f;
+    }
+
+    // 기본
     protected bool UseEnergy(int _value, bool _check)
     {
         if (_check) return commonInfo.energy[0].Data - _value >= 0;

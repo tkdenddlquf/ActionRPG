@@ -6,7 +6,9 @@ using UnityEngine.UI;
 public class LerpSlider
 {
     public Slider slider;
+    public float speed = 0.2f;
 
+    private float lerpValue;
     private LerpUIAction action;
 
     public Action<float> callback;
@@ -22,12 +24,25 @@ public class LerpSlider
 
     public void FixedUpdate()
     {
-        slider.value = Mathf.Lerp(slider.value, Data, 0.2f);
+        lerpValue = Mathf.Lerp(slider.value, Data, speed);
 
-        if (slider.value < Data + 0.0001f)
+        if (slider.value < lerpValue) // 증가
         {
-            action.Remove(FixedUpdate);
-            callback?.Invoke(Data);
+            if (slider.value > Data - 0.0001f)
+            {
+                action.Remove(FixedUpdate);
+                callback?.Invoke(Data);
+            }
         }
+        else
+        {
+            if (slider.value < Data + 0.0001f)
+            {
+                action.Remove(FixedUpdate);
+                callback?.Invoke(Data);
+            }
+        }
+
+        slider.value = lerpValue;
     }
 }

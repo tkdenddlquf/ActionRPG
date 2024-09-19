@@ -6,7 +6,9 @@ using UnityEngine.UI;
 public class LerpImage
 {
     public Image image;
+    public float speed = 0.2f;
 
+    private float lerpValue;
     private LerpUIAction action;
 
     public Action<float> callback;
@@ -22,12 +24,25 @@ public class LerpImage
 
     public void FixedUpdate()
     {
-        image.fillAmount = Mathf.Lerp(image.fillAmount, Data, 0.2f);
+        lerpValue = Mathf.Lerp(image.fillAmount, Data, speed);
 
-        if (image.fillAmount == Data + 0.0001f)
+        if (image.fillAmount < lerpValue) // 증가
         {
-            action.Remove(FixedUpdate);
-            callback?.Invoke(Data);
+            if (image.fillAmount > Data - 0.0001f)
+            {
+                action.Remove(FixedUpdate);
+                callback?.Invoke(Data);
+            }
         }
+        else
+        {
+            if (image.fillAmount < Data + 0.0001f)
+            {
+                action.Remove(FixedUpdate);
+                callback?.Invoke(Data);
+            }
+        }
+
+        image.fillAmount = lerpValue;
     }
 }

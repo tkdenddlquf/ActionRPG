@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class BoxCollider_Custum : MonoBehaviour
 {
@@ -8,12 +9,10 @@ public class BoxCollider_Custum : MonoBehaviour
     public List<Vector3> pos = new() { new(0, 0, 0) };
     public List<Vector3> scale = new() { new(1, 1, 1) };
 
-    public Callback callback;
+    public Action<BoxCollider_CustomInfo> callback;
 
     private int length;
     private readonly Collider[] colliders = new Collider[5];
-
-    public delegate void Callback(BoxCollider_CustomInfo _info);
 
     public void CheckHit(int _index, LayerMask _mask) // 공격 확인
     {

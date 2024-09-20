@@ -24,14 +24,13 @@ public class EnemyStateBase
     {
         if (enemy.LookTarget == null) // 추적할 대상이 없는 경우 원래 위치로 이동
         {
-            enemy.AnimStateBase.State = AnimState.Idle;
-
-            if (Vector3.Distance(enemy.transform.position, initPos) < 1) enemy.Animator.SetFloat("MoveSpeed", 1, 1f, 0.1f);
+            if (Vector3.Distance(enemy.transform.position, initPos) < 1) enemy.AnimStateBase.State = AnimState.Idle;
             else
             {
+                enemy.AnimStateBase.State = AnimState.Walk;
                 enemy.transform.LookAt(initPos); // 기존 위치로 방향 설정
 
-                enemy.Animator.SetFloat("MoveSpeed", 1 + enemy.commonInfo.moveSpeed.Data, 1f, 0.1f);
+                enemy.Animator.SetFloat("MoveSpeed", enemy.commonInfo.moveSpeed.Data, 1f, 0.1f);
             }
 
             return;
@@ -43,8 +42,8 @@ public class EnemyStateBase
         {
             enemy.transform.LookAt(initPos); // 기존 위치로 방향 설정
 
-            enemy.AnimStateBase.State = AnimState.Idle;
-            enemy.Animator.SetFloat("MoveSpeed", 1 + enemy.commonInfo.moveSpeed.Data, 1f, 0.1f);
+            enemy.AnimStateBase.State = AnimState.Walk;
+            enemy.Animator.SetFloat("MoveSpeed", enemy.commonInfo.moveSpeed.Data, 1f, 0.1f);
 
             enemy.LookTarget = null; // 추적 해제
 
@@ -64,8 +63,8 @@ public class EnemyStateBase
         }
         else
         {
-            enemy.AnimStateBase.StateRecord = AnimState.Idle;
-            enemy.Animator.SetFloat("MoveSpeed", 1 + enemy.commonInfo.moveSpeed.Data, 1f, 0.1f);
+            enemy.AnimStateBase.StateRecord = AnimState.Walk;
+            enemy.Animator.SetFloat("MoveSpeed", enemy.commonInfo.moveSpeed.Data, 1f, 0.1f);
         }
 
         enemy.AnimStateBase.State = enemy.AnimStateBase.StateRecord;

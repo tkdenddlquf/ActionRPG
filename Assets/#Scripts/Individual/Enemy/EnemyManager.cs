@@ -52,7 +52,11 @@ public class EnemyManager : IndividualBase
     {
         if (LookTarget == null) // 추적이 해제된 경우
         {
-            if (GameManager._instance.bossPanel.Target == this) GameManager._instance.bossPanel.Target = null;
+            if (GameManager._instance.bossPanel.Target == this)
+            {
+                GameManager._instance.bossPanel.Target = null;
+                GameManager._instance.bossPanel.gameObject.SetActive(false);
+            }
         }
     }
 }

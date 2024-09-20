@@ -8,7 +8,7 @@ public abstract class IndividualBase : MonoBehaviour
     public GameObject attack;
 
     private HitableObject hitThis;
-    private GameObject lookTarget;
+    private IndividualBase lookTarget;
 
     // 공격
     private HitableObject hitTarget;
@@ -21,11 +21,16 @@ public abstract class IndividualBase : MonoBehaviour
     public Animator Animator { get; private set; }
     public AnimStateBase AnimStateBase { get; private set; }
     public LerpUIAction LerpAction { get; private set; } = new();
-    public GameObject LookTarget
+    public IndividualBase LookTarget
     {
         get => lookTarget;
         set
         {
+            if (value != null)
+            {
+                if (value.commonInfo.hp[0].Data == 0) return;
+            }
+
             lookTarget = value;
 
             LookTargetCallback();
@@ -63,7 +68,7 @@ public abstract class IndividualBase : MonoBehaviour
     {
         if (AnimStateBase.roll) return false; // 구르는 중인 경우 회피
 
-        if (LookTarget == null) LookTarget = _hitBase.gameObject;
+        if (LookTarget == null) LookTarget = _hitBase;
 
         if (AnimStateBase.guard) commonInfo.hp[0].Data -= _hitBase.commonInfo.atk.Data / 2;
         else commonInfo.hp[0].Data -= _hitBase.commonInfo.atk.Data;
@@ -77,13 +82,13 @@ public abstract class IndividualBase : MonoBehaviour
         {
             attackable.Remove(_hitBase.gameObject);
 
-            if (LookTarget == _hitBase.gameObject) LookTarget = null; // 추적중인 경우
+            if (LookTarget == _hitBase) LookTarget = null; // 추적중인 경우
         }
         else
         {
             attackable[_hitBase.gameObject][_type].Attack();
 
-            if (LookTarget == null) LookTarget = _hitBase.gameObject;
+            if (LookTarget == null) LookTarget = _hitBase;
         }
     }
 
@@ -104,7 +109,7 @@ public abstract class IndividualBase : MonoBehaviour
         if (!attackable.ContainsKey(_info.target)) attackable[_info.target] = new();
         if (!attackable[_info.target].ContainsKey(_info.index)) attackable[_info.target][_info.index] = new();
 
-        if (!attackable[_info.target][_info.index].Attackable(GetDelay(_info.index), Collider.maxCount[_info.index])) return;
+        if (!attackable[_info.target][_info.index].Attackable(GetDelay(_info.index), _info.maxCount)) return;
 
         if (_info.target.TryGetComponent(out hitTarget)) hitTarget.Hit(this, _info.index, AttackCallback);
     }
@@ -121,5 +126,19 @@ public abstract class IndividualBase : MonoBehaviour
         else commonInfo.energy[0].Data -= _value;
 
         return true;
+    }
+
+    public Vector3 GetSlopeVector()
+    {
+        // Collider.OnTriggerEnter_Check(1, 1 << LayerMask.NameToLayer("Ground"));
+
+        Ray ray = new(transform.position + Vector3.up, Vector3.down);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 2f, 1 << LayerMask.NameToLayer("Ground")))
+        {
+            return hit.normal;
+        }
+
+        return Vector3.forward;
     }
 }

@@ -643,12 +643,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   potion:
     image: {fileID: 974339445}
+    speed: 0.2
   hp:
     slider: {fileID: 877214372}
+    speed: 0.2
   mp:
     slider: {fileID: 618152201}
+    speed: 0.2
   energy:
     slider: {fileID: 2059914415}
+    speed: 0.2
 --- !u!1 &345480641
 GameObject:
   m_ObjectHideFlags: 0
@@ -952,6 +956,26 @@ PrefabInstance:
     - target: {fileID: 3360752932982242809, guid: f84e50b40bac5ef42a4c4fe8f96c00ee, type: 3}
       propertyPath: m_Name
       value: Character
+      objectReference: {fileID: 0}
+    - target: {fileID: 3852688005302022515, guid: f84e50b40bac5ef42a4c4fe8f96c00ee, type: 3}
+      propertyPath: data.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3852688005302022515, guid: f84e50b40bac5ef42a4c4fe8f96c00ee, type: 3}
+      propertyPath: data.Array.data[1].scale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3852688005302022515, guid: f84e50b40bac5ef42a4c4fe8f96c00ee, type: 3}
+      propertyPath: data.Array.data[1].scale.y
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3852688005302022515, guid: f84e50b40bac5ef42a4c4fe8f96c00ee, type: 3}
+      propertyPath: data.Array.data[1].scale.z
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3852688005302022515, guid: f84e50b40bac5ef42a4c4fe8f96c00ee, type: 3}
+      propertyPath: data.Array.data[1].maxCount
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1932,7 +1956,7 @@ GameObject:
   - component: {fileID: 1036142629}
   - component: {fileID: 1036142628}
   - component: {fileID: 1036142627}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2232,7 +2256,7 @@ GameObject:
   - component: {fileID: 1565997869}
   - component: {fileID: 1565997868}
   - component: {fileID: 1565997867}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plane (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2915,6 +2939,7 @@ MonoBehaviour:
   thisName: {fileID: 765239300}
   hp:
     slider: {fileID: 537086322}
+    speed: 0.2
 --- !u!1 &2013410473
 GameObject:
   m_ObjectHideFlags: 1
@@ -5386,11 +5411,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 766379d900d0e1945ad7b64db07e979f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxCount: 01000000
-  pos:
-  - {x: 0, y: 1, z: 1}
-  scale:
-  - {x: 0.5, y: 0.75, z: 0.7}
+  data:
+  - maxCount: 1
+    pos: {x: 0, y: 1, z: 1}
+    scale: {x: 0.5, y: 0.75, z: 0.7}
 --- !u!1 &7958990038154525222
 GameObject:
   m_ObjectHideFlags: 0

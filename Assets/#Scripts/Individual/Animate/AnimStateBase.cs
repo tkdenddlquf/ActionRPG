@@ -33,6 +33,7 @@ public class AnimStateBase
 public enum AnimState
 {
     Idle,
+    Walk,
     Attack,
     Guard,
     Roll,

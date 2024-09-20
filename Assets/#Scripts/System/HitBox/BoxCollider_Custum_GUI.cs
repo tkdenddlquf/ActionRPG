@@ -15,7 +15,14 @@ public class BoxCollider_Custum_GUI : Editor
 
     public override void OnInspectorGUI()
     {
-        component.Select = EditorGUILayout.IntSlider("Select", component.Select, 0, component.pos.Count);
+        if (component.data.Count == 0)
+        {
+            component.data.Add(new());
+
+            Record("Component as New");
+        }
+
+        component.Select = EditorGUILayout.IntSlider("Select", component.Select, 0, component.data.Count);
         component[GUIMode.Pos] = EditorGUILayout.Vector3Field("Pos", component[GUIMode.Pos]);
         component[GUIMode.Scale] = EditorGUILayout.Vector3Field("Scale", component[GUIMode.Scale]);
 
@@ -43,20 +50,18 @@ public class BoxCollider_Custum_GUI : Editor
 
         if (GUILayout.Button("Add"))
         {
-            component.scale.Add(new(1, 1, 1));
-            component.pos.Add(new(0, 0, 0));
+            component.data.Add(new());
 
-            component.Select = component.pos.Count - 1;
+            component.Select = component.data.Count - 1;
 
             Record("Add");
         }
 
         if (GUILayout.Button("Remove"))
         {
-            if (component.Select == component.pos.Count - 1) component.Select--;
+            if (component.Select == component.data.Count - 1) component.Select--;
 
-            component.scale.RemoveAt(component.Select + 1);
-            component.pos.RemoveAt(component.Select + 1);
+            component.data.RemoveAt(component.Select + 1);
 
             Record("Remove");
         }
